@@ -1,0 +1,104 @@
+{
+  "SITES_PNPM_SHARED_STORE": [
+    "pnpm-workspace.yaml",
+    "scripts/install-pnpm.sh"
+  ],
+  "SITES_BUILD_KILL_AFTER": [
+    "scripts/build-verified.sh"
+  ],
+  "SITES_ENV_READY": [
+    "scripts/build-verified.sh",
+    "scripts/install-ci.sh",
+    "scripts/install-pnpm.sh"
+  ],
+  "SITES_PROJECT_ROOT": [
+    "scripts/build-verified.sh",
+    "scripts/install-ci.sh",
+    "scripts/install-pnpm.sh"
+  ],
+  "SITES_BUILD_TIMEOUT": [
+    "scripts/build-verified.sh"
+  ],
+  "SHARP_IGNORE_GLOBAL_LIBVIPS": [
+    "scripts/install-ci.mjs"
+  ],
+  "SITES_INSTALL_KILL_AFTER": [
+    "scripts/install-ci.sh",
+    "scripts/install-pnpm.sh"
+  ],
+  "SITES_RUNTIME_ROOT": [
+    "scripts/install-ci.sh",
+    "scripts/install-pnpm.sh",
+    "scripts/sites-env.mjs",
+    "scripts/sites-env.sh"
+  ],
+  "PPID": [
+    "scripts/install-ci.sh"
+  ],
+  "SITES_INSTALL_TIMEOUT": [
+    "scripts/install-ci.sh",
+    "scripts/install-pnpm.sh"
+  ],
+  "HOME": [
+    "scripts/install-ci.sh",
+    "scripts/install-pnpm.sh"
+  ],
+  "SITES_NPM_CACHE_SEED": [
+    "scripts/install-ci.sh"
+  ],
+  "SITES_PNPM_STORE_PREPARE_TIMEOUT": [
+    "scripts/install-pnpm.sh"
+  ],
+  "XDG_CACHE_HOME": [
+    "scripts/install-pnpm.sh"
+  ],
+  "SITES_PNPM_BOOTSTRAP_TIMEOUT": [
+    "scripts/install-pnpm.sh"
+  ],
+  "SITES_INSTALL_LOCKS_PID": [
+    "scripts/install-pnpm.sh"
+  ],
+  "XDG_DATA_HOME": [
+    "scripts/install-pnpm.sh"
+  ],
+  "SITES_PNPM_CACHE_SEED": [
+    "scripts/install-pnpm.sh"
+  ],
+  "SITES_PNPM_BIN": [
+    "scripts/install-pnpm.sh"
+  ],
+  "SITES_PNPM_STORE_LOCK_TIMEOUT": [
+    "scripts/install-pnpm.sh"
+  ],
+  "SITES_INSTALL_REPORT_PATH": [
+    "scripts/npm-install.mjs",
+    "scripts/pnpm-install.mjs"
+  ],
+  "WRANGLER_LOG_PATH": [
+    "scripts/sites-env.mjs",
+    "vite.config.ts"
+  ],
+  "MINIFLARE_REGISTRY_PATH": [
+    "scripts/sites-env.mjs",
+    "vite.config.ts"
+  ],
+  "WRANGLER_WRITE_LOGS": [
+    "scripts/sites-env.mjs",
+    "vite.config.ts"
+  ],
+  "WRANGLER_REGISTRY_PATH": [
+    "scripts/sites-env.mjs",
+    "vite.config.ts"
+  ],
+  "CLOUDFLARE_CF_FETCH_ENABLED": [
+    "scripts/sites-env.mjs",
+    "vite.config.ts"
+  ],
+  "WRANGLER_SEND_METRICS": [
+    "scripts/sites-env.mjs",
+    "vite.config.ts"
+  ],
+  "CODEX_SANDBOX": [
+    "vite.config.ts"
+  ]
+}

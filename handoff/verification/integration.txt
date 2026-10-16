@@ -1,0 +1,1 @@
+PASS: 85 integration assertions. Admin authorization, publication, forms, inbox, media, schema migrations, and 14 page renders verified.

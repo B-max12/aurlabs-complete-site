@@ -1,0 +1,61 @@
+[
+  {
+    "name": "integration",
+    "command": [
+      "node",
+      "tests/integration.mjs"
+    ],
+    "startedAt": "2026-10-16T20:58:55.401382+00:00",
+    "exitCode": 0,
+    "seconds": 0.95,
+    "log": "integration.txt",
+    "tail": [
+      "PASS: 85 integration assertions. Admin authorization, publication, forms, inbox, media, schema migrations, and 14 page renders verified."
+    ]
+  },
+  {
+    "name": "client",
+    "command": [
+      "node",
+      "tests/client.mjs"
+    ],
+    "startedAt": "2026-10-16T20:58:55.401713+00:00",
+    "exitCode": 0,
+    "seconds": 1.44,
+    "log": "client.txt",
+    "tail": [
+      "PASS: 220 DOM and geometry assertions. Filters, hero controls, guided form flow, draft recovery, server failure/retry, duplicate prevention, Auri controls, and private admin preview verified."
+    ]
+  },
+  {
+    "name": "typescript",
+    "command": [
+      "node",
+      "node_modules/typescript/bin/tsc",
+      "--noEmit"
+    ],
+    "startedAt": "2026-10-16T20:58:55.401976+00:00",
+    "exitCode": 0,
+    "seconds": 5.53,
+    "log": "typescript.txt",
+    "tail": []
+  },
+  {
+    "name": "build",
+    "command": [
+      "node",
+      "scripts/run-framework.mjs",
+      "build"
+    ],
+    "startedAt": "2026-10-16T20:58:56.353706+00:00",
+    "exitCode": 0,
+    "seconds": 7.47,
+    "log": "build.txt",
+    "tail": [
+      "  \u03bb API  \u0192 Dynamic",
+      "",
+      "  Build complete. Run `vinext start` to start the production server.",
+      ""
+    ]
+  }
+]

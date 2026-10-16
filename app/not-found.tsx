@@ -1,0 +1,1 @@
+export default function NotFound(){return <main className="not-found"><span className="eyebrow">404 / A LITTLE OFF THE PATH</span><h1>This corner of<br/>the lab is empty.</h1><p>The page may have moved, or the link may need a second look.</p><a className="button orange" href="/">Back to the lab ↗</a><a href="/products" className="text-link">Explore our tools →</a></main>}

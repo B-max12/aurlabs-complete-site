@@ -1,0 +1,11 @@
+'use client';
+import {useEffect,useRef} from 'react';
+import {X,Eye} from 'lucide-react';
+import {ProductVisual,ArticleArt} from './visuals';
+import type {Product,Article,TeamMember,ContentKind} from '@/lib/content';
+export default function ContentPreview({kind,record,close}:{kind:ContentKind;record:Product|Article|TeamMember;close:()=>void}){
+ const dialog=useRef<HTMLDialogElement>(null);
+ useEffect(()=>{dialog.current?.showModal();return()=>dialog.current?.close()},[]);
+ const p=record as Product,a=record as Article,t=record as TeamMember;
+ return <dialog ref={dialog} className="content-preview" onCancel={e=>{e.preventDefault();close()}} onClick={e=>{if(e.target===e.currentTarget)close()}} aria-labelledby="preview-title"><div className="preview-bar"><span><Eye size={15}/> UNSAVED PREVIEW · ONLY YOU CAN SEE THIS</span><button autoFocus type="button" className="icon-button" aria-label="Close content preview" onClick={close}><X size={20}/></button></div>{kind==='products'?<><div className="preview-product"><div><span className="eyebrow">{p.status==='released'?'RELEASE PREVIEW':'WORK IN PROGRESS'}</span><h1 id="preview-title">{p.name||'Your product name'}</h1><p>{p.tagline}</p><div className="platform-labels">{p.platforms.map(x=><span key={x}>{x}</span>)}</div></div><ProductVisual product={p}/></div><div className="prose">{p.description.split('\n\n').map((x,i)=><p key={i}>{x}</p>)}</div><ul>{p.features.map((x,i)=><li key={i}>{x}</li>)}</ul><p className="muted">{p.releases.length} release(s) · {p.license}</p></>:kind==='team'?<><span className="eyebrow">TEAM PROFILE</span><h1 id="preview-title">{t.name||'Team member'}</h1><h3>{t.role}</h3><p className="prose">{t.bio}</p></>:<><span className="eyebrow">{a.tag}</span><h1 id="preview-title">{a.title||'Your headline'}</h1><p className="article-deck">{a.summary}</p><p className="muted">{a.author} · {a.date}</p><ArticleArt research={kind==='research'}/><div className="prose">{a.body.split('\n\n').map((x,i)=>x.startsWith('## ')?<h2 key={i}>{x.slice(3)}</h2>:<p key={i}>{x}</p>)}</div></>}<div className="preview-footer"><p>Close to continue editing. Saving with Published enabled makes the record public.</p><button className="button dark" type="button" onClick={close}>Back to editing</button></div></dialog>;
+}

@@ -1,0 +1,284 @@
+[
+  {
+    "package": "@base-ui/react",
+    "declared": "^1.7.0",
+    "resolved": "1.7.0",
+    "group": "dependencies"
+  },
+  {
+    "package": "@hookform/resolvers",
+    "declared": "^5.7.1",
+    "resolved": "5.7.1",
+    "group": "dependencies"
+  },
+  {
+    "package": "@shadcn/react",
+    "declared": "^0.3.0",
+    "resolved": "0.3.0",
+    "group": "dependencies"
+  },
+  {
+    "package": "class-variance-authority",
+    "declared": "0.7.1",
+    "resolved": "0.7.1",
+    "group": "dependencies"
+  },
+  {
+    "package": "clsx",
+    "declared": "2.1.1",
+    "resolved": "2.1.1",
+    "group": "dependencies"
+  },
+  {
+    "package": "cmdk",
+    "declared": "^1.1.1",
+    "resolved": "1.1.1",
+    "group": "dependencies"
+  },
+  {
+    "package": "date-fns",
+    "declared": "^4.4.0",
+    "resolved": "4.4.0",
+    "group": "dependencies"
+  },
+  {
+    "package": "drizzle-orm",
+    "declared": "0.45.2",
+    "resolved": "0.45.2",
+    "group": "dependencies"
+  },
+  {
+    "package": "embla-carousel-react",
+    "declared": "^8.6.0",
+    "resolved": "8.6.0",
+    "group": "dependencies"
+  },
+  {
+    "package": "input-otp",
+    "declared": "^1.4.2",
+    "resolved": "1.4.2",
+    "group": "dependencies"
+  },
+  {
+    "package": "lucide-react",
+    "declared": "^1.31.0",
+    "resolved": "1.31.0",
+    "group": "dependencies"
+  },
+  {
+    "package": "next",
+    "declared": "16.3.4",
+    "resolved": "16.3.4",
+    "group": "dependencies"
+  },
+  {
+    "package": "next-themes",
+    "declared": "^0.4.6",
+    "resolved": "0.4.6",
+    "group": "dependencies"
+  },
+  {
+    "package": "radix-ui",
+    "declared": "^1.6.7",
+    "resolved": "1.6.7",
+    "group": "dependencies"
+  },
+  {
+    "package": "react",
+    "declared": "19.2.6",
+    "resolved": "19.2.6",
+    "group": "dependencies"
+  },
+  {
+    "package": "react-day-picker",
+    "declared": "^10.0.1",
+    "resolved": "10.0.1",
+    "group": "dependencies"
+  },
+  {
+    "package": "react-dom",
+    "declared": "19.2.6",
+    "resolved": "19.2.6",
+    "group": "dependencies"
+  },
+  {
+    "package": "react-hook-form",
+    "declared": "^7.85.0",
+    "resolved": "7.85.0",
+    "group": "dependencies"
+  },
+  {
+    "package": "react-resizable-panels",
+    "declared": "^4.12.2",
+    "resolved": "4.12.2",
+    "group": "dependencies"
+  },
+  {
+    "package": "recharts",
+    "declared": "^3.8.0",
+    "resolved": "3.8.0",
+    "group": "dependencies"
+  },
+  {
+    "package": "sonner",
+    "declared": "^2.0.8",
+    "resolved": "2.0.8",
+    "group": "dependencies"
+  },
+  {
+    "package": "tailwind-merge",
+    "declared": "3.6.0",
+    "resolved": "3.6.0",
+    "group": "dependencies"
+  },
+  {
+    "package": "three",
+    "declared": "0.186.1",
+    "resolved": "0.186.1",
+    "group": "dependencies"
+  },
+  {
+    "package": "vaul",
+    "declared": "^1.1.2",
+    "resolved": "1.1.2",
+    "group": "dependencies"
+  },
+  {
+    "package": "zod",
+    "declared": "^3.25.76",
+    "resolved": "3.25.76",
+    "group": "dependencies"
+  },
+  {
+    "package": "@cloudflare/vite-plugin",
+    "declared": "1.37.1",
+    "resolved": "1.37.1",
+    "group": "devDependencies"
+  },
+  {
+    "package": "@cloudflare/workers-types",
+    "declared": "4.20260515.1",
+    "resolved": "4.20260515.1",
+    "group": "devDependencies"
+  },
+  {
+    "package": "@tailwindcss/postcss",
+    "declared": "4.2.1",
+    "resolved": "4.2.1",
+    "group": "devDependencies"
+  },
+  {
+    "package": "@types/node",
+    "declared": "22.19.19",
+    "resolved": "22.19.19",
+    "group": "devDependencies"
+  },
+  {
+    "package": "@types/react",
+    "declared": "19.2.14",
+    "resolved": "19.2.14",
+    "group": "devDependencies"
+  },
+  {
+    "package": "@types/react-dom",
+    "declared": "19.2.3",
+    "resolved": "19.2.3",
+    "group": "devDependencies"
+  },
+  {
+    "package": "@types/three",
+    "declared": "0.186.0",
+    "resolved": "0.186.0",
+    "group": "devDependencies"
+  },
+  {
+    "package": "@vitejs/plugin-react",
+    "declared": "6.0.2",
+    "resolved": "6.0.2",
+    "group": "devDependencies"
+  },
+  {
+    "package": "@vitejs/plugin-rsc",
+    "declared": "0.5.26",
+    "resolved": "0.5.26",
+    "group": "devDependencies"
+  },
+  {
+    "package": "drizzle-kit",
+    "declared": "0.31.10",
+    "resolved": "0.31.10",
+    "group": "devDependencies"
+  },
+  {
+    "package": "eslint",
+    "declared": "9.39.4",
+    "resolved": "9.39.4",
+    "group": "devDependencies"
+  },
+  {
+    "package": "eslint-config-next",
+    "declared": "16.3.4",
+    "resolved": "16.3.4",
+    "group": "devDependencies"
+  },
+  {
+    "package": "happy-dom",
+    "declared": "20.14.5",
+    "resolved": "20.14.5",
+    "group": "devDependencies"
+  },
+  {
+    "package": "json-rpc-2.0",
+    "declared": "1.7.1",
+    "resolved": "1.7.1",
+    "group": "devDependencies"
+  },
+  {
+    "package": "raw-body",
+    "declared": "3.0.2",
+    "resolved": "3.0.2",
+    "group": "devDependencies"
+  },
+  {
+    "package": "react-server-dom-webpack",
+    "declared": "19.2.6",
+    "resolved": "19.2.6",
+    "group": "devDependencies"
+  },
+  {
+    "package": "tailwindcss",
+    "declared": "4.2.1",
+    "resolved": "4.2.1",
+    "group": "devDependencies"
+  },
+  {
+    "package": "tw-animate-css",
+    "declared": "^1.4.0",
+    "resolved": "1.4.0",
+    "group": "devDependencies"
+  },
+  {
+    "package": "typescript",
+    "declared": "5.9.3",
+    "resolved": "5.9.3",
+    "group": "devDependencies"
+  },
+  {
+    "package": "vinext",
+    "declared": "1.0.0-beta.5",
+    "resolved": "1.0.0-beta.5",
+    "group": "devDependencies"
+  },
+  {
+    "package": "vite",
+    "declared": "8.0.13",
+    "resolved": "8.0.13",
+    "group": "devDependencies"
+  },
+  {
+    "package": "wrangler",
+    "declared": "4.92.0",
+    "resolved": "4.92.0",
+    "group": "devDependencies"
+  }
+]

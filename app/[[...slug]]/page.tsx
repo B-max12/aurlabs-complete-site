@@ -1,0 +1,9 @@
+import type {Metadata} from "next";
+import {notFound} from "next/navigation";
+import {readContent} from "@/lib/server";
+import {defaultContent} from "@/lib/content";
+import Site from "../site";
+export const dynamic="force-dynamic";
+type Props={params:Promise<{slug?:string[]}>};
+export async function generateMetadata({params}:Props):Promise<Metadata>{const {slug=[]}=await params;const titles:Record<string,string>={products:"The collection",about:"Our story",journal:"Inside the lab",research:"Research & explorations",join:"Build with us",support:"Support the mission",contact:"Start a conversation",privacy:"Privacy notice",terms:"Terms of use",admin:"Admin studio"};let title=titles[slug[0]]||"Good software. For everyone.";if(slug[1]&&["products","journal","research"].includes(slug[0])){try{const d=await readContent();const item=d[slug[0] as "products"|"journal"|"research"].find(p=>p.slug===slug[1]);if(item)title="name" in item?item.name:item.title;}catch{}}return {title:title+" — Aur Labs",robots:slug[0]==="admin"?{index:false,follow:false}:undefined,alternates:{canonical:"/"+slug.join("/")}};}
+export default async function Page({params}:Props){const {slug=[]}=await params;const allowed=["products","about","journal","research","join","support","contact","privacy","terms","admin"];if(slug.length>2||slug[0]&&!allowed.includes(slug[0])||slug[1]&&!["products","journal","research"].includes(slug[0]))notFound();let content=defaultContent,storageError=false;try{content=await readContent()}catch{storageError=true;}if(slug[1]&&![...content.products,...content.journal,...content.research].some(p=>p.slug===slug[1]))notFound();if(slug[1]&&!content[slug[0] as "products"|"journal"|"research"].some(p=>p.slug===slug[1]))notFound();return <Site content={content} path={"/"+slug.join("/")} storageError={storageError}/>;}

@@ -1,0 +1,8 @@
+Verified at 2026-10-16T21:08:40.131652+00:00
+Command: node scripts/start-local.mjs --prepare-only
+Result: exit 0.
+All 144 production source hashes matched.
+A random disposable setup secret was generated only in ignored .dev.vars; its value is not included.
+Wrangler applied the original 0000_huge_azazel.sql to local D1 under .wrangler/state/v3/d1.
+Eleven SQL commands succeeded. No remote operation or server startup occurred.
+The local initialization helper is an export addition; it does not modify application source.

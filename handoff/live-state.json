@@ -1,0 +1,86 @@
+{
+  "checkedAt": "2026-10-16T21:01:30.955Z",
+  "sourceCommit": "4847db8e2e23a9acb1083b4c60b3d272514265d4",
+  "siteId": "appgprj_6acb04e29d2081918548275da19f51e4",
+  "productionVersion": 2,
+  "latestSavedVersion": 6,
+  "runtimeRevision": 2,
+  "runtimeVariableNames": [],
+  "d1": {
+    "content": {
+      "rows": [],
+      "complete": true,
+      "columns": [
+        "id",
+        "kind",
+        "data",
+        "published",
+        "deleted",
+        "updated_at"
+      ]
+    },
+    "media": {
+      "rows": [],
+      "complete": true,
+      "columns": [
+        "id",
+        "name",
+        "mime",
+        "size",
+        "created_at"
+      ]
+    },
+    "submissions": {
+      "rows": [],
+      "complete": true,
+      "columns": [
+        "id",
+        "kind",
+        "name",
+        "email",
+        "data",
+        "status",
+        "created_at"
+      ]
+    }
+  },
+  "notExportedD1Tables": [
+    "administrators",
+    "admin_unlocks",
+    "rate_limits",
+    "audit_log"
+  ],
+  "r2": {
+    "mediaIndexRows": 0,
+    "completeBucketInventoryAvailable": false
+  },
+  "domains": [
+    {
+      "hostname": "aurlabs.online",
+      "status": "active",
+      "tls": "active",
+      "currentCnameTarget": "custom-domains.chatgpt.site.",
+      "currentApexTargets": [
+        "162.159.143.30",
+        "172.66.3.26"
+      ]
+    },
+    {
+      "hostname": "www.aurlabs.online",
+      "status": "active",
+      "tls": "active",
+      "currentCnameTarget": "custom-domains.chatgpt.site.",
+      "currentApexTargets": [
+        "162.159.143.30",
+        "172.66.3.26"
+      ]
+    }
+  ],
+  "github": {
+    "connectedAccount": "B-max12",
+    "targetRepository": "B-max12/aurlabs-site",
+    "targetLookup": "NOT_FOUND",
+    "createRepositoryOperationAvailable": false,
+    "pushed": false
+  }
+}

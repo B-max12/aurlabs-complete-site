@@ -1,0 +1,1 @@
+PASS: 220 DOM and geometry assertions. Filters, hero controls, guided form flow, draft recovery, server failure/retry, duplicate prevention, Auri controls, and private admin preview verified.
