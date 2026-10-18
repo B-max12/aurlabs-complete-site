@@ -1,3 +1,15 @@
+# CURRENT STATE (read first)
+
+This project was migrated from ChatGPT's Cloudflare hosting to **Next.js on Vercel + Supabase (Postgres)**.
+- Database access: `lib/db.ts` (a small adapter that keeps the old D1-style `prepare().bind().first()/all()/run()` API on top of Postgres).
+- Admin auth: Supabase Auth email link (token verified in `lib/server.ts` `identity()`), then the existing username/password unlock.
+- Media: `media` + `media_blobs` tables (no object storage).
+- Deployment steps and env vars: `DEPLOYMENT.md`. Env template: `.env.example`.
+- ARCHITECTURE.md, ENV_AND_SECRETS.md, TODO_AND_KNOWN_ISSUES.md and the `handoff/` folder describe the OLD Cloudflare version; treat them as history.
+- Owner: Saad (Aur Labs). Domain: aurlabs.online (Namecheap). Never change DNS or mail settings without the owner's explicit approval.
+
+---
+
 # Claude handoff — Aur Labs
 
 ## Brief
