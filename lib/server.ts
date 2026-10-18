@@ -1,7 +1,7 @@
-import { env } from "cloudflare:workers";
+import { db } from "./db";
 import { defaultContent, type SiteContent, type ContentKind } from "./content";
 
-export function database(){if(!env.DB)throw new Error("Database is not configured.");return env.DB;}
+export function database(){return db;}
 export async function readContent(includeDrafts=false):Promise<SiteContent>{
   const rows=await database().prepare("SELECT id, kind, data, published, deleted FROM content").all<{id:string;kind:ContentKind;data:string;published:number;deleted:number}>();
   const data=structuredClone(defaultContent);
@@ -39,9 +39,19 @@ export async function passwordHash(password:string,salt:string){
 }
 export type Admin={id:string;user_id:string;username:string;password_hash:string;salt:string};
 export const getAdmin=()=>database().prepare("SELECT * FROM administrators WHERE id = 'owner'").first<Admin>();
-export function identity(req:Request){return req.headers.get("oai-authenticated-user-id");}
+export async function identity(req:Request):Promise<string|null>{
+  // The signed-in person is verified by Supabase Auth: the browser sends its access token and we ask Supabase who it belongs to.
+  const m=/^Bearer\s+([\w-]+\.[\w-]+\.[\w-]+)$/.exec(req.headers.get("authorization")||"");
+  const url=process.env.NEXT_PUBLIC_SUPABASE_URL,key=process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  if(!m||!url||!key)return null;
+  try{
+    const r=await fetch(url+"/auth/v1/user",{headers:{apikey:key,Authorization:"Bearer "+m[1]},cache:"no-store"});
+    if(!r.ok)return null;
+    const u=await r.json();return typeof u?.id==="string"&&u.id?u.id:null;
+  }catch{return null}
+}
 export async function authorized(req:Request){
-  const user=identity(req);if(!user)return false;
+  const user=await identity(req);if(!user)return false;
   const admin=await getAdmin();if(!admin||admin.user_id!==user)return false;
   const token=req.headers.get("x-aur-unlock");if(!token||token.length>200)return false;
   const row=await database().prepare("SELECT user_id, expires_at FROM admin_unlocks WHERE token_hash = ?").bind(await sha(token)).first<{user_id:string;expires_at:number}>();
@@ -49,7 +59,7 @@ export async function authorized(req:Request){
 }
 export async function rateLimit(key:string,limit:number,windowMs:number){
   const now=Date.now(),bucket=Math.floor(now/windowMs),id=await sha(key+":"+bucket);
-  const row=await database().prepare("INSERT INTO rate_limits (id, count, expires_at) VALUES (?, 1, ?) ON CONFLICT(id) DO UPDATE SET count = count + 1 RETURNING count").bind(id,now+windowMs).first<{count:number}>();
+  const row=await database().prepare("INSERT INTO rate_limits (id, count, expires_at) VALUES (?, 1, ?) ON CONFLICT(id) DO UPDATE SET count = rate_limits.count + 1 RETURNING count").bind(id,now+windowMs).first<{count:number}>();
   await database().prepare("DELETE FROM rate_limits WHERE expires_at < ?").bind(now-windowMs).run();
   return !!row&&row.count<=limit;
 }
