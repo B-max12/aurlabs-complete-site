@@ -1,10 +1,9 @@
-import {env} from "cloudflare:workers";
 import {database,json,parseBody,sameOrigin,identity,getAdmin,authorized,rateLimit,passwordHash,constantTime,issueUnlock,audit,readContent,sha} from "@/lib/server";
 import {productSchema,articleSchema,teamSchema,settingsSchema} from "@/lib/validation";
 export const dynamic="force-dynamic";
 export async function GET(req:Request){try{
-  const user=identity(req);const admin=await getAdmin();
-  const status={signedIn:!!user,configured:!!admin,canSetup:((env as any).AUR_ADMIN_SETUP_TOKEN?.length||0)>=32,isOwner:!!user&&admin?.user_id===user};
+  const user=await identity(req);const admin=await getAdmin();
+  const status={signedIn:!!user,configured:!!admin,canSetup:(process.env.AUR_ADMIN_SETUP_TOKEN?.length||0)>=32,isOwner:!!user&&admin?.user_id===user};
   if(new URL(req.url).searchParams.get("view")==="status")return json(status);
   if(!(await authorized(req)))return json({error:"Unlock the admin area to continue.",...status},401);
   const [content,inbox,assets,events]=await Promise.all([readContent(true),database().prepare("SELECT * FROM submissions ORDER BY created_at DESC LIMIT 500").all(),database().prepare("SELECT * FROM media ORDER BY created_at DESC LIMIT 200").all(),database().prepare("SELECT action,target,created_at FROM audit_log ORDER BY created_at DESC LIMIT 50").all()]);
@@ -14,12 +13,12 @@ export async function GET(req:Request){try{
 export async function POST(req:Request){
   if(!sameOrigin(req))return json({error:"This action must come from the website."},403);
   try{
-    const b=await parseBody(req),user=identity(req);if(!user)return json({error:"Sign in with ChatGPT first."},401);
+    const b=await parseBody(req),user=await identity(req);if(!user)return json({error:"Sign in with your email first."},401);
     if(b.action==="setup"||b.action==="unlock"){
       if(!(await rateLimit("admin:"+user,10,900000)))return json({error:"Too many attempts. Please wait 15 minutes."},429);
       const admin=await getAdmin();
       if(b.action==="setup"){
-        const key=(env as any).AUR_ADMIN_SETUP_TOKEN as string|undefined;
+        const key=process.env.AUR_ADMIN_SETUP_TOKEN;
         if(admin)return json({error:"An administrator is already configured."},409);
         if(!key||key.length<32||typeof b.setupToken!=="string"||!constantTime(key,b.setupToken))return json({error:"The setup token is missing or incorrect. Configure AUR_ADMIN_SETUP_TOKEN in the hosting environment first."},403);
         if(typeof b.username!=="string"||!/^[a-zA-Z0-9_.-]{3,40}$/.test(b.username))return json({error:"Use 3–40 letters, numbers, dots, hyphens, or underscores for your username."},400);
