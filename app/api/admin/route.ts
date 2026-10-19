@@ -6,7 +6,10 @@ export async function GET(req:Request){try{
   const status={signedIn:!!user,configured:!!admin,canSetup:(process.env.AUR_ADMIN_SETUP_TOKEN?.length||0)>=32,isOwner:!!user&&admin?.user_id===user};
   if(new URL(req.url).searchParams.get("view")==="status")return json(status);
   if(!(await authorized(req)))return json({error:"Unlock the admin area to continue.",...status},401);
-  const [content,inbox,assets,events]=await Promise.all([readContent(true),database().prepare("SELECT * FROM submissions ORDER BY created_at DESC LIMIT 500").all(),database().prepare("SELECT * FROM media ORDER BY created_at DESC LIMIT 200").all(),database().prepare("SELECT action,target,created_at FROM audit_log ORDER BY created_at DESC LIMIT 50").all()]);
+  const content=await readContent(true);
+  const inbox=await database().prepare("SELECT * FROM submissions ORDER BY created_at DESC LIMIT 500").all();
+  const assets=await database().prepare("SELECT * FROM media ORDER BY created_at DESC LIMIT 200").all();
+  const events=await database().prepare("SELECT action,target,created_at FROM audit_log ORDER BY created_at DESC LIMIT 50").all();
   return json({content,inbox:inbox.results,assets:assets.results,events:events.results,username:admin?.username});
 }catch{return json({error:"Admin storage is temporarily unavailable."},503);}}
 
