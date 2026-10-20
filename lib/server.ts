@@ -39,23 +39,13 @@ export async function passwordHash(password:string,salt:string){
 }
 export type Admin={id:string;user_id:string;username:string;password_hash:string;salt:string};
 export const getAdmin=()=>database().prepare("SELECT * FROM administrators WHERE id = 'owner'").first<Admin>();
-export async function identity(req:Request):Promise<string|null>{
-  // The signed-in person is verified by Supabase Auth: the browser sends its access token and we ask Supabase who it belongs to.
-  const m=/^Bearer\s+([\w-]+\.[\w-]+\.[\w-]+)$/.exec(req.headers.get("authorization")||"");
-  const url=process.env.NEXT_PUBLIC_SUPABASE_URL,key=process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-  if(!m||!url||!key)return null;
-  try{
-    const r=await fetch(url+"/auth/v1/user",{headers:{apikey:key,Authorization:"Bearer "+m[1]},cache:"no-store"});
-    if(!r.ok)return null;
-    const u=await r.json();return typeof u?.id==="string"&&u.id?u.id:null;
-  }catch{return null}
-}
+export function clientIp(req:Request){return (req.headers.get("x-forwarded-for")||"").split(",")[0].trim()||req.headers.get("x-real-ip")||"unknown"}
+// Access to the admin area requires a valid unlock token, which is only issued after the admin username and password are verified.
 export async function authorized(req:Request){
-  const user=await identity(req);if(!user)return false;
-  const admin=await getAdmin();if(!admin||admin.user_id!==user)return false;
+  const admin=await getAdmin();if(!admin)return false;
   const token=req.headers.get("x-aur-unlock");if(!token||token.length>200)return false;
   const row=await database().prepare("SELECT user_id, expires_at FROM admin_unlocks WHERE token_hash = ?").bind(await sha(token)).first<{user_id:string;expires_at:number}>();
-  return !!row&&row.user_id===user&&row.expires_at>Date.now();
+  return !!row&&row.user_id===admin.user_id&&row.expires_at>Date.now();
 }
 export async function rateLimit(key:string,limit:number,windowMs:number){
   const now=Date.now(),bucket=Math.floor(now/windowMs),id=await sha(key+":"+bucket);
