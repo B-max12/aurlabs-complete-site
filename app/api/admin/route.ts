@@ -1,11 +1,11 @@
-import {database,json,parseBody,sameOrigin,identity,getAdmin,authorized,rateLimit,passwordHash,constantTime,issueUnlock,audit,readContent,sha} from "@/lib/server";
+import {database,json,parseBody,sameOrigin,clientIp,getAdmin,authorized,rateLimit,passwordHash,constantTime,issueUnlock,audit,readContent,sha} from "@/lib/server";
 import {productSchema,articleSchema,teamSchema,settingsSchema} from "@/lib/validation";
 export const dynamic="force-dynamic";
 export async function GET(req:Request){try{
-  const user=await identity(req);const admin=await getAdmin();
-  const status={signedIn:!!user,configured:!!admin,canSetup:(process.env.AUR_ADMIN_SETUP_TOKEN?.length||0)>=32,isOwner:!!user&&admin?.user_id===user};
+  const admin=await getAdmin();
+  const status={signedIn:true,configured:!!admin,canSetup:(process.env.AUR_ADMIN_SETUP_TOKEN?.length||0)>=32,isOwner:!!admin};
   if(new URL(req.url).searchParams.get("view")==="status")return json(status);
-  if(!(await authorized(req)))return json({error:"Unlock the admin area to continue.",...status},401);
+  if(!(await authorized(req)))return json({error:"Sign in to continue.",...status},401);
   const content=await readContent(true);
   const inbox=await database().prepare("SELECT * FROM submissions ORDER BY created_at DESC LIMIT 500").all();
   const assets=await database().prepare("SELECT * FROM media ORDER BY created_at DESC LIMIT 200").all();
@@ -16,9 +16,9 @@ export async function GET(req:Request){try{
 export async function POST(req:Request){
   if(!sameOrigin(req))return json({error:"This action must come from the website."},403);
   try{
-    const b=await parseBody(req),user=await identity(req);if(!user)return json({error:"Sign in with your email first."},401);
+    const b=await parseBody(req);
     if(b.action==="setup"||b.action==="unlock"){
-      if(!(await rateLimit("admin:"+user,10,900000)))return json({error:"Too many attempts. Please wait 15 minutes."},429);
+      if(!(await rateLimit("admin:"+clientIp(req),10,900000))||!(await rateLimit("admin:all",60,900000)))return json({error:"Too many attempts. Please wait 15 minutes."},429);
       const admin=await getAdmin();
       if(b.action==="setup"){
         const key=process.env.AUR_ADMIN_SETUP_TOKEN;
@@ -27,13 +27,14 @@ export async function POST(req:Request){
         if(typeof b.username!=="string"||!/^[a-zA-Z0-9_.-]{3,40}$/.test(b.username))return json({error:"Use 3–40 letters, numbers, dots, hyphens, or underscores for your username."},400);
         if(typeof b.password!=="string"||b.password.length<12||b.password.length>128)return json({error:"Choose a password of 12–128 characters."},400);
         const salt=crypto.randomUUID();
-        await database().prepare("INSERT INTO administrators (id,user_id,username,password_hash,salt,created_at) VALUES ('owner',?,?,?,?,?)").bind(user,b.username,await passwordHash(b.password,salt),salt,Date.now()).run();
-        await audit(user,"admin.setup","owner");return json({ok:true,...await issueUnlock(user)});
+        await database().prepare("INSERT INTO administrators (id,user_id,username,password_hash,salt,created_at) VALUES ('owner',?,?,?,?,?)").bind("owner",b.username,await passwordHash(b.password,salt),salt,Date.now()).run();
+        await audit("owner","admin.setup","owner");return json({ok:true,...await issueUnlock("owner")});
       }
-      if(!admin||admin.user_id!==user||typeof b.password!=="string"||b.password.length>128||b.username!==admin.username||!constantTime(await passwordHash(b.password,admin.salt),admin.password_hash))return json({error:"The username, password, or signed-in account doesn’t match."},403);
-      await audit(user,"admin.unlock","owner");return json({ok:true,...await issueUnlock(user)});
+      if(!admin||typeof b.username!=="string"||typeof b.password!=="string"||b.password.length>128||b.username!==admin.username||!constantTime(await passwordHash(b.password,admin.salt),admin.password_hash))return json({error:"The username or password doesn’t match."},403);
+      await audit(admin.user_id,"admin.unlock","owner");return json({ok:true,...await issueUnlock(admin.user_id)});
     }
-    if(!(await authorized(req)))return json({error:"Your admin session is locked. Sign in again to continue."},401);
+    if(!(await authorized(req)))return json({error:"Your admin session has ended. Sign in again to continue.",signedIn:true},401);
+    const user=(await getAdmin())!.user_id;
     if(b.action==="lock"){
       await database().prepare("DELETE FROM admin_unlocks WHERE token_hash = ?").bind(await sha(req.headers.get("x-aur-unlock")||"")).run();return json({ok:true});
     }
