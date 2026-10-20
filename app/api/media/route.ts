@@ -1,4 +1,4 @@
-import {authorized,sameOrigin,json,database,identity,audit,readBytes} from "@/lib/server";
+import {authorized,sameOrigin,json,database,getAdmin,audit,readBytes} from "@/lib/server";
 import {sql} from "@/lib/db";
 export const runtime="nodejs";
 const MAX=4*1024*1024; // Vercel functions accept request bodies up to about 4.5 MB
@@ -18,7 +18,7 @@ export async function POST(req:Request){
     const id=crypto.randomUUID()+"."+ext;
     await database().prepare("INSERT INTO media (id,name,mime,size,created_at) VALUES (?,?,?,?,?)").bind(id,file.name.slice(0,200),mime,file.size,Date.now()).run();
     await sql()`INSERT INTO media_blobs (id,data) VALUES (${id},${Buffer.from(bytes)})`;
-    await audit((await identity(req))!,"media.upload",id);
+    await audit((await getAdmin())?.user_id||"owner","media.upload",id);
     return json({ok:true,url:"/api/media/"+id,id,name:file.name},201);
   }catch{return json({error:"The upload failed. Please try again."},500);}
 }
