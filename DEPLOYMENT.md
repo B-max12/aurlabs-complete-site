@@ -10,18 +10,11 @@ The site is a standard Next.js (App Router) app. Data lives in a Supabase projec
 ## Environment variables (Vercel -> Project Settings -> Environment Variables)
 | Name | Secret? | What it is |
 |---|---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | no | `https://zitgifdbkpvdrgpvczle.supabase.co` |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | no | the project's publishable key (see `.env.example`) |
 | `SUPABASE_DB_URL` | YES | Supabase -> Connect -> Transaction pooler string (port 6543) with the database password filled in |
 | `AUR_ADMIN_SETUP_TOKEN` | YES | random string, 32+ characters, used once to create the first admin |
 
-## Supabase Auth settings (dashboard, one time)
-1. Authentication -> URL Configuration: set Site URL to `https://aurlabs.online` and add `https://aurlabs.online/admin` to Redirect URLs (also add the Vercel preview URL while testing).
-2. After the owner has signed in once, turn off "Allow new users to sign up" (Authentication -> Sign In / Providers). Strangers cannot become admin anyway (setup needs the secret token), but this keeps the user list clean.
-
-## Admin login (two steps)
-1. Email sign-in link (Supabase Auth proves you own the email).
-2. Admin username + password (first visit: also the setup token). Unlocks last 30 minutes.
+## Admin login
+Username + password only (first visit: also the private setup token). Sessions last 30 minutes. Repeated wrong attempts are rate limited per IP. There is no third-party or email sign-in on the admin page; Supabase is used only as the database.
 
 ## Build and run
 `pnpm install` then `pnpm build` and `pnpm start` (Node 22.13+). Vercel runs `next build` automatically.
