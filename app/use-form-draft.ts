@@ -1,11 +1,14 @@
 'use client';
 import {useEffect,useRef,useState} from 'react';
+import {getVisitor,subscribe} from './visitor-session';
 export type FormValues=Record<string,string|boolean>;
 const TTL=24*60*60*1000;
 export function useFormDraft(kind:'join'|'contact',defaults:FormValues){
  const key='aur-draft-v2-'+kind;
  const [values,setValues]=useState<FormValues>(defaults),[step,setStep]=useState(0),[ready,setReady]=useState(false),[keep,setKeep]=useState(true),[restored,setRestored]=useState(false),[available,setAvailable]=useState(true),[finished,setFinished]=useState(false);
  const id=useRef('');
+ // Fill in name and email from a signed-in visitor, without overwriting anything they typed.
+ useEffect(()=>{if(!ready)return;const fill=()=>{const v=getVisitor();if(v)setValues(c=>({...c,name:typeof c.name==='string'&&c.name?c.name:v.name,email:typeof c.email==='string'&&c.email?c.email:v.email}))};fill();return subscribe(fill)},[ready]);
  useEffect(()=>{try{const raw=sessionStorage.getItem(key);if(raw){const d=JSON.parse(raw);if(d.version===2&&Date.now()-d.savedAt<TTL&&d.values&&typeof d.values==='object'){
   const safe=Object.fromEntries(Object.entries(d.values).filter(([k,v])=>!['__proto__','constructor','prototype','consent','volunteer','website'].includes(k)&&(typeof v==='string'||typeof v==='boolean')));
   setValues({...defaults,...safe,consent:false,volunteer:false,website:''});setStep(kind==='join'&&Number.isInteger(d.step)?Math.max(0,Math.min(2,d.step)):0);if(typeof d.id==='string'&&/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(d.id))id.current=d.id;setRestored(true);

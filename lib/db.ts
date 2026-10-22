@@ -15,7 +15,7 @@ export function sql() {
       max_pipeline: 1, // Supabase's pooler cannot handle several queries sent at once on one connection
       idle_timeout: 20,
       connect_timeout: 15,
-      ssl: "require",
+      ssl: process.env.DB_SSL === "off" ? false : "require", // DB_SSL=off only for a local development database
       // bigint columns hold millisecond timestamps; the app expects plain numbers.
       types: { bigint: { to: 20, from: [20], parse: (x: string) => Number(x), serialize: (x: unknown) => String(x) } },
     };
