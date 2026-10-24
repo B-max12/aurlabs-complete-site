@@ -22,7 +22,7 @@ export default function RootLayout({
       <head>
         <meta
           name="ahrefs-site-verification"
-          content="2b3c26d8260b31f271523c13518e19ba1f5136225540530f0c0953791a71965f"
+          content="6248bc27d686b11f57559455e7683b95fcaaa5857e94bf407956ea3604d20e8b"
         />
         <script
           src="https://analytics.ahrefs.com/analytics.js"
