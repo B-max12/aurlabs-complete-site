@@ -16,6 +16,27 @@ The site is a standard Next.js (App Router) app. Data lives in a Supabase projec
 ## Admin login
 Username + password only (first visit: also the private setup token). Sessions last 30 minutes. Repeated wrong attempts are rate limited per IP. There is no third-party or email sign-in on the admin page; Supabase is used only as the database.
 
+## Email (Resend)
+Form submissions are saved to the admin Inbox and also emailed to the site owner (`lib/mail.ts`). Replying to that email answers the visitor directly. Sending is best effort and never blocks a submission.
+
+| Variable | Secret? | What it is |
+|---|---|---|
+| `RESEND_API_KEY` | YES | a Resend key with sending access, restricted to aurlabs.online |
+| `MAIL_FROM` | no | `Aur Labs <noreply@aurlabs.online>` |
+| `MAIL_TO` | no | `aur@aurlabs.online` |
+
+DNS for sending (Namecheap): DKIM `resend._domainkey`, SPF TXT and MX on `send`, CNAME `rsend`. The `send` MX needs Namecheap Mail Settings set to Custom MX; the mailbox itself (Private Email) needs its own MX records kept at the root.
+
+## Visitor sign-in (public site)
+Visitors can sign in with Google, GitHub, Microsoft or an email link (Supabase Auth). Code: `app/visitor-session.ts`, `app/visitor.tsx`. Visitor accounts never get admin access (the admin uses its own username/password). A signed-in visitor gets name/email pre-filled on forms.
+
+Supabase dashboard settings this relies on:
+1. Authentication > Sign In / Providers: enable Google, GitHub, Azure (Microsoft) and Email. In each provider's own console, set the callback URL to `https://<project-ref>.supabase.co/auth/v1/callback`.
+2. Authentication > URL Configuration: Site URL `https://aurlabs.online`; Redirect URLs `https://aurlabs.online/**`.
+3. Authentication > Emails > SMTP: configure a custom SMTP sender. Supabase's built-in email service only delivers to project team members, so email sign-in links will not reach ordinary visitors without it.
+
+Optional env vars (defaults are built in): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+
 ## Build and run
 `pnpm install` then `pnpm build` and `pnpm start` (Node 22.13+). Vercel runs `next build` automatically.
 
