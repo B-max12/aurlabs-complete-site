@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import "./globals.css";
+
+const inter = localFont({ src: "./fonts/inter-latin-wght-normal.woff2", variable: "--font-inter", display: "swap", weight: "100 900" });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://aurlabs.online"),
@@ -11,6 +14,19 @@ export const metadata: Metadata = {
     shortcut: "/favicon.svg",
   },
 };
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" className={inter.variable}>
+      <body className="antialiased">{children}</body>
+    </html>
+  );
+}
+
 
 export default function RootLayout({
   children,
