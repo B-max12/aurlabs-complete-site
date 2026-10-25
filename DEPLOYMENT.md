@@ -19,9 +19,9 @@ Username + password only (first visit: also the private setup token). Sessions l
 ## Email (Resend)
 Form submissions are saved to the admin Inbox and also emailed to the site owner (`lib/mail.ts`). Replying to that email answers the visitor directly. Sending is best effort and never blocks a submission.
 
-| Variable | Secret? | What it is |
+| Variable | Secret | Value |
 |---|---|---|
-| `RESEND_API_KEY` | YES | a Resend key with sending access, restricted to aurlabs.online |
+| `RESEND_API_KEY` | yes | a Resend key with sending access, restricted to aurlabs.online |
 | `MAIL_FROM` | no | `Aur Labs <noreply@aurlabs.online>` |
 | `MAIL_TO` | no | `aur@aurlabs.online` |
 
@@ -36,6 +36,14 @@ Supabase dashboard settings this relies on:
 3. Authentication > Emails > SMTP: configure a custom SMTP sender. Supabase's built-in email service only delivers to project team members, so email sign-in links will not reach ordinary visitors without it.
 
 Optional env vars (defaults are built in): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+
+## Performance and security notes
+- Font: Inter is self-hosted (`app/fonts`, loaded with `next/font/local`); no request goes to Google Fonts.
+- Images: uploaded screenshots are served through Next's optimiser (`app/media-image.tsx`, `images` settings in `next.config.ts`). The first (hero) image is preloaded with high priority.
+- The 3D guide (Auri, three.js) loads a few seconds after the page is ready, or on first interaction (`DeferredAuri` in `app/site.tsx`; `app/auri-help.ts` is the small always-loaded bridge).
+- CSS is inlined into the HTML (`experimental.inlineCss`), so there are no render-blocking stylesheets.
+- Security headers (HSTS, nosniff, frame protection, referrer and permissions policy, COOP) are set in `next.config.ts`. A strict script CSP is not enabled because Next's inline scripts need nonces; only the safe directives are set.
+- Production source maps are published (`productionBrowserSourceMaps`).
 
 ## Build and run
 `pnpm install` then `pnpm build` and `pnpm start` (Node 22.13+). Vercel runs `next build` automatically.
