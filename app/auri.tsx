@@ -6,9 +6,7 @@ import AuriCharacter from './components/auri/AuriCharacter';
 import {guideFor,placeGuide,type AuriMood,type Rect} from '@/lib/auri-guides';
 
 type HelpEvent={message:string;target?:string;mood?:AuriMood};
-export function helpAuri(message:string,target?:string,mood:AuriMood='explaining'){
- window.dispatchEvent(new CustomEvent<HelpEvent>('auri-help',{detail:{message,target,mood}}));
-}
+export {helpAuri} from "./auri-help";
 const storage={get:(key:string)=>{try{return sessionStorage.getItem(key)}catch{return null}},set:(key:string,value:string)=>{try{sessionStorage.setItem(key,value)}catch{}}};
 const faq=[
  {q:'Find a tool',a:'Filter the catalogue by platform and category. Concept previews are ideas in progress; released tools have real version and download details.',href:'/products'},
