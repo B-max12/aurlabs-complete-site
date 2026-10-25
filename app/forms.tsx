@@ -1,7 +1,7 @@
 "use client";
 import {useRef,useState} from "react";
 import {ArrowRight,ArrowLeft,Check,CheckCircle2,Send,Clock,Globe2,Heart,Mail,HelpCircle,RotateCcw} from "lucide-react";
-import {helpAuri} from "./auri";
+import {helpAuri} from "./auri-help";
 import {GUIDE_FIELDS,ROLE_GUIDES,guideFor} from "@/lib/auri-guides";
 import {useFormDraft,submitForm} from "./use-form-draft";
 import {joinSchema,contactSchema} from "@/lib/validation";
