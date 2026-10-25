@@ -115,7 +115,7 @@ export function AccountMenu() {
           )}
         </>
       ) : (
-        <button type="button" className="visitor-signin-btn" onClick={() => setDialog(true)}><User size={15} /><span>Sign in</span></button>
+        <button type="button" className="visitor-signin-btn" aria-label="Sign in" onClick={() => setDialog(true)}><User size={15} /><span>Sign in</span></button>
       )}
       {dialog && !visitor && createPortal(<SignInDialog onClose={() => setDialog(false)} />, document.body)}
       {notice && createPortal(<div className={"visitor-toast " + notice.kind} role="status">{notice.text}</div>, document.body)}
