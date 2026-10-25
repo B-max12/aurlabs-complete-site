@@ -15,6 +15,7 @@ export const notify = () => emit();
 export const subscribe = (f: () => void) => { listeners.add(f); return () => { listeners.delete(f); }; };
 export const snapshot = () => { try { return localStorage.getItem(STORAGE_KEY); } catch { return null; } };
 
+
 function read(): Stored | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
