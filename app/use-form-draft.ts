@@ -18,6 +18,7 @@ export function useFormDraft(kind:'join'|'contact',defaults:FormValues){
  const ensureId=()=>{if(!id.current)id.current=crypto.randomUUID();if(keep)try{const raw=sessionStorage.getItem(key);if(raw){const d=JSON.parse(raw);sessionStorage.setItem(key,JSON.stringify({...d,id:id.current}))}}catch{}return id.current};
  return {values,setValues,step,setStep,id,ensureId,keep,setKeep,restored,available,clear};
 }
+
 export async function submitForm(data:unknown){
  const response=await fetch('/api/submissions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),signal:AbortSignal.timeout(20000)});
  const result=await response.json() as {reference?:string;error?:string};
