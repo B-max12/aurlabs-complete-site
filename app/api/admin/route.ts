@@ -43,6 +43,7 @@ export async function POST(req:Request){
       if(typeof b.password!=="string"||b.password.length<12||b.password.length>128)return json({error:"Choose a password of 12–128 characters."},400);
       const salt=crypto.randomUUID();await database().batch([database().prepare("UPDATE administrators SET password_hash=?, salt=? WHERE id='owner'").bind(await passwordHash(b.password,salt),salt),database().prepare("DELETE FROM admin_unlocks")]);await audit(user,"admin.password","owner");return json({ok:true,...await issueUnlock(user)});
     }
+    
     if(b.action==="save"){
       const schemas={products:productSchema,journal:articleSchema,research:articleSchema,team:teamSchema,settings:settingsSchema};
       const schema=schemas[b.kind as keyof typeof schemas];if(!schema)return json({error:"Unknown content type."},400);
