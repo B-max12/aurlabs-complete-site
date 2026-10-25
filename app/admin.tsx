@@ -8,6 +8,7 @@ import Auri from "./auri";
 import {GUIDE_FIELDS} from "@/lib/auri-guides";
 import ContentPreview from "./content-preview";
 import "./studio.css";
+
 type AdminData={content:SiteContent;inbox:any[];assets:any[];events:any[];username:string};
 type Section="overview"|"products"|"journal"|"research"|"team"|"inbox"|"media"|"settings";
 type Status={signedIn:boolean;configured:boolean;canSetup:boolean;isOwner:boolean};
