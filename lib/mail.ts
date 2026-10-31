@@ -40,3 +40,4 @@ export async function notifySubmission(kind: string, name: string, email: string
 <p style="margin:16px 0 0;font-size:13px;color:#737373">Reference ${esc(reference)} · Reply to this email to answer them directly.</p></div>`;
   await sendMail({ to, subject: `New ${what} from ${clean(name, 60)}`, text, html, replyTo: email });
 }
+
