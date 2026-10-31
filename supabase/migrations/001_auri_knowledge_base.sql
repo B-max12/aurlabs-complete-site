@@ -46,3 +46,4 @@ language sql stable set search_path = public, extensions as $$
   from base b order by score desc limit n;
 $$;
 grant execute on function public.kb_search(extensions.vector, text, text, integer) to aur_app;
+
