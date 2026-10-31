@@ -39,3 +39,4 @@ export const defaultContent: SiteContent = {
 
 export const categoryLabel = (c: string) => c === "software" ? "Desktop software" : c === "app" ? "Mobile app" : "Command line";
 export const statusLabel = (s: string) => s === "released" ? "Available now" : s === "development" ? "In development" : "Concept preview";
+
