@@ -3,6 +3,7 @@ import {useCallback,useEffect,useRef,useState} from 'react';
 import {createPortal} from 'react-dom';
 import {X,ArrowUpRight,HelpCircle,Move,VolumeX,Sparkles,RotateCcw,Check,Hand,Search} from 'lucide-react';
 import AuriCharacter from './components/auri/AuriCharacter';
+import {AuriAsk} from './auri-ask';
 import {guideFor,placeGuide,type AuriMood,type Rect} from '@/lib/auri-guides';
 
 type HelpEvent={message:string;target?:string;mood?:AuriMood};
@@ -63,8 +64,8 @@ export default function Auri({guides={},admin=false}:{guides?:Record<string,stri
   </div>
   {open&&<dialog className="auri-dialog" ref={dialog} onCancel={e=>{e.preventDefault();close()}} onClick={e=>{if(e.target===e.currentTarget)close()}} aria-labelledby="auri-title">
    <div className="auri-dialog-heading"><div><span className="eyebrow"><span className="green-dot"/> YOUR GUIDE TO THE LAB</span><h2 id="auri-title">A little clarity.</h2></div><button autoFocus type="button" className="icon-button" aria-label="Close Auri guide" onClick={close}><X size={20}/></button></div>
-   <div className="auri-intro"><AuriCharacter mood="observing" motion={motion}/><p>{admin?'I can explain the studio’s controls. Save confirms an update; Published controls what visitors can see.':'I’m Auri. I can help you find your way and explain each field as you go.'}<small>Website guidance · no messages are sent to an AI service.</small></p></div>
-   <label className="search-box"><Search size={16}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Find some guidance…" aria-label="Search Auri help"/></label>
+   <div className="auri-intro"><AuriCharacter mood="observing" motion={motion}/><p>{admin?'I can explain the studio’s controls. Save confirms an update; Published controls what visitors can see.':'I’m Auri. I can help you find your way and explain each field as you go.'}<small>Website guidance · answers come from what the team has written, never from a chat bot.</small></p></div>
+   {!admin&&<AuriAsk/>}<label className="search-box"><Search size={16}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search the site guides…" aria-label="Search Auri help"/></label>
    <div className="auri-faq">{faq.filter(f=>(f.q+f.a).toLowerCase().includes(query.toLowerCase())).map(f=><details key={f.q}><summary>{f.q}<ArrowUpRight size={14}/></summary><p>{f.a}</p><a className="text-link" href={f.href}>Go there <ArrowUpRight size={14}/></a></details>)}{!faq.some(f=>(f.q+f.a).toLowerCase().includes(query.toLowerCase()))&&<p>No matching guide. <a href="/contact">Ask the team.</a></p>}</div>
    <div className="auri-preferences"><label><span><Hand size={15}/> Contextual field & button hints</span><input type="checkbox" checked={enabled} onChange={e=>{setEnabled(e.target.checked);storage.set('auri-hints',e.target.checked?'on':'off')}}/></label><label><span><Sparkles size={15}/> Character animation</span><input type="checkbox" checked={motion} onChange={e=>{setMotion(e.target.checked);storage.set('auri-motion',e.target.checked?'on':'off')}}/></label></div>
    <div className="auri-dialog-footer"><button onClick={()=>setOffset({x:0,y:0})}><RotateCcw size={13}/> Reset position</button><button onClick={tuck}><VolumeX size={13}/> Minimize</button></div><p className="auri-access-note"><Move size={11}/> Drag the character to move it. Reduced-motion preferences are respected.</p>
