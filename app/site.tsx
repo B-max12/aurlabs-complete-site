@@ -83,3 +83,4 @@ export default function Site({content,path,storageError=false}:{content:SiteCont
  else body=<Legal content={content} terms={section==="terms"}/>;
  return <div className="public-site"><a href="#main" className="skip-link">Skip to content</a><Header content={content} path={path}/>{storageError&&<div role="status" className="storage-notice">Latest updates are temporarily unavailable. Please refresh before submitting a form.</div>}<main id="main">{body}</main><Footer content={content}/><DeferredAuri guides={content.settings.auriGuides}/></div>
 }
+
