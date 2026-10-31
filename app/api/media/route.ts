@@ -22,3 +22,4 @@ export async function POST(req:Request){
     return json({ok:true,url:"/api/media/"+id,id,name:file.name},201);
   }catch{return json({error:"The upload failed. Please try again."},500);}
 }
+
