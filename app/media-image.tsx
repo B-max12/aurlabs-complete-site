@@ -10,4 +10,3 @@ export function MediaImage({ src, alt, sizes = "100vw", priority = false, thumb 
   const widths = thumb ? THUMB_WIDTHS : WIDTHS;
   return <img src={optimised(src, widths[Math.min(1, widths.length - 1)])} srcSet={widths.map((w) => optimised(src, w) + " " + w + "w").join(", ")} sizes={thumb ? "96px" : sizes} {...common} />;
 }
-
