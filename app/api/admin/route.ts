@@ -66,3 +66,4 @@ export async function POST(req:Request){
     return json({error:"Unknown action."},400);
   }catch(error){console.error("Admin operation failed",error instanceof Error?error.message:"unknown");return json({error:"The change wasn’t saved. Check the fields and try again."},500);}
 }
+
