@@ -23,4 +23,3 @@ export function ProductVisual({product,large=false,priority=false}:{product:Prod
  </div>;
 }
 export function ArticleArt({index=0,research=false}:{index?:number;research?:boolean}){return <div className={"article-art art-"+(research?"research":index%3)} aria-hidden="true">{research?<div className="research-orbits"><i/><i/><i/><span/></div>:index%2===0?<div className="art-type">a<span>↗</span></div>:<div className="stacked-squares"><i/><i/><i/><Star/></div>}<span className="art-small">AUR LABS / {research?"EXPLORATIONS":"FIELD NOTES"}</span></div>}
-
