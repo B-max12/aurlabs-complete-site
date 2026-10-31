@@ -27,6 +27,12 @@ Form submissions are saved to the admin Inbox and also emailed to the site owner
 
 DNS for sending (Namecheap): DKIM `resend._domainkey`, SPF TXT and MX on `send`, CNAME `rsend`. The `send` MX needs Namecheap Mail Settings set to Custom MX; the mailbox itself (Private Email) needs its own MX records kept at the root.
 
+## Auri knowledge (answers by meaning)
+Tables `kb_entries` and `kb_unanswered`, the search function `kb_search` and the Edge Function `embed` live in the Supabase project (see `supabase/`). The website server calls the function with the `EMBED_KEY` environment variable (secret). See `AURI_GUIDE.md`.
+
+## SEO
+Per-product titles, descriptions, structured data, `sitemap.xml` and `robots.txt` are generated from the database (`lib/seo.ts`, `app/sitemap.ts`, `app/robots.ts`, `app/route-page.tsx`). See `SEO_GUIDE.md`. The route file `app/[[...slug]]/page.tsx` is deliberately tiny: Next.js needs `revalidate` written in that file, everything else is in `app/route-page.tsx`.
+
 ## Visitor sign-in (public site)
 Visitors can sign in with Google, GitHub, Microsoft or an email link (Supabase Auth). Code: `app/visitor-session.ts`, `app/visitor.tsx`. Visitor accounts never get admin access (the admin uses its own username/password). A signed-in visitor gets name/email pre-filled on forms.
 
