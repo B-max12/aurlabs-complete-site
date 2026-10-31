@@ -139,6 +139,39 @@ body:has(.public-site) { background: #fff; }
 .public-site .phones .phone > p { color: #3d2a1a; }
 .public-site .article-art .art-small { color: #3b2b20; opacity: 1; }
 
+/* Product page FAQ */
+.public-site .product-faq { margin-top: 40px; padding-top: 8px; }
+.public-site .product-faq h2 { font-size: clamp(24px, 2.4vw, 30px); margin-bottom: 14px; }
+.public-site .product-faq details { border-top: 1px solid var(--line); padding: 14px 0; }
+.public-site .product-faq details:last-child { border-bottom: 1px solid var(--line); }
+.public-site .product-faq summary { cursor: pointer; font-weight: 500; font-size: 16px; color: var(--ink); list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+.public-site .product-faq summary::-webkit-details-marker { display: none; }
+.public-site .product-faq summary::after { content: "+"; color: var(--muted); font-size: 20px; line-height: 1; }
+.public-site .product-faq details[open] summary::after { content: "–"; }
+.public-site .product-faq details p { margin: 10px 0 0; font-size: 15px; line-height: 1.7; }
+
+/* Ask Auri panel */
+.public-site .auri-ask { margin: 4px 0 18px; padding: 16px; background: #fff; border: 1px solid var(--line); border-radius: 14px; text-align: left; }
+.public-site .auri-ask label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 8px; color: var(--ink); }
+.public-site .auri-ask .ask-row { display: flex; gap: 8px; }
+.public-site .auri-ask .ask-row input { flex: 1; min-width: 0; height: 42px; padding: 0 12px; border: 1px solid var(--st-line2); border-radius: 10px; font-size: 14px; background: #fff; color: var(--ink); }
+.public-site .auri-ask .ask-row button { width: 42px; height: 42px; border-radius: 10px; background: var(--ink); color: #fff; display: grid; place-items: center; cursor: pointer; border: 0; flex-shrink: 0; }
+.public-site .auri-ask .ask-row button:disabled { opacity: 0.45; cursor: default; }
+.public-site .ask-related { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center; }
+.public-site .ask-related span { font-size: 12px; color: var(--muted); width: 100%; }
+.public-site .ask-related button { font-size: 13px; padding: 7px 12px; border: 1px solid var(--st-line2); border-radius: 999px; background: #fff; color: var(--ink); text-align: left; cursor: pointer; line-height: 1.35; }
+.public-site .ask-related button:hover { background: var(--st-wash); }
+.public-site .ask-answer { margin-top: 14px; padding: 14px; background: var(--st-wash); border: 1px solid var(--line); border-radius: 12px; }
+.public-site .ask-answer > b { display: block; font-size: 14px; margin-bottom: 8px; color: var(--ink); }
+.public-site .ask-answer-text p, .public-site .ask-answer-text li { font-size: 14px; line-height: 1.65; color: #262626; margin: 0 0 8px; }
+.public-site .ask-answer-text ul, .public-site .ask-answer-text ol { margin: 0 0 8px; padding-left: 22px; }
+.public-site .ask-answer-text ul { list-style: disc; }
+.public-site .ask-answer-text ol { list-style: decimal; }
+.public-site .ask-answer .text-link { margin-top: 4px; }
+.public-site .ask-status { font-size: 13px; line-height: 1.55; color: var(--muted); margin: 10px 0 0; }
+.public-site .ask-status.error { color: #b42318; }
+.public-site .ask-note { display: block; margin-top: 12px; font-size: 12px; line-height: 1.5; color: #6b6b6b; }
+
 /* Neutral surfaces */
 .public-site :is(.mission-section, .invitation, .mission-art, .site-footer) { background: var(--st-wash); }
 .public-site .invitation { border: 1px solid var(--line); }
