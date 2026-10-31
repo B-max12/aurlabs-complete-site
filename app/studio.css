@@ -279,4 +279,3 @@
 .admin-app .kb-editor textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--st-line2); border-radius: 10px; font-size: 14px; background: #fff; line-height: 1.6; }
 .admin-app .kb-editor select, .admin-app .kb-editor input:not([type="checkbox"]) { width: 100%; min-height: 40px; padding: 9px 12px; border: 1px solid var(--st-line2); border-radius: 10px; font-size: 14px; background: #fff; }
 .admin-app .kb-editor .field { margin-bottom: 14px; }
-
