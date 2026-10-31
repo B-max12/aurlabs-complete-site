@@ -59,4 +59,3 @@ export async function issueUnlock(user:string){
   await database().batch([database().prepare("DELETE FROM admin_unlocks WHERE expires_at < ?").bind(Date.now()),database().prepare("INSERT INTO admin_unlocks (token_hash,user_id,expires_at) VALUES (?,?,?)").bind(await sha(token),user,expires)]);
   return {unlockToken:token,expiresAt:expires};
 }
-
