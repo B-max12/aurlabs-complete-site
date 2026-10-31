@@ -12,3 +12,4 @@ export function takePendingHelp() {
   pending = null;
   return p && Date.now() - p.at < 6000 ? p : null;
 }
+
