@@ -1,0 +1,3 @@
+// The real page code lives in ../route-page.tsx. Next.js needs this segment setting written out in this file.
+export { default, generateMetadata, generateStaticParams } from "../route-page";
+export const revalidate = 60; // cached for a minute; saving in the admin refreshes the pages immediately
