@@ -30,6 +30,9 @@ DNS for sending (Namecheap): DKIM `resend._domainkey`, SPF TXT and MX on `send`,
 ## Auri knowledge (answers by meaning)
 Tables `kb_entries` and `kb_unanswered`, the search function `kb_search` and the Edge Function `embed` live in the Supabase project (see `supabase/`). The website server calls the function with the `EMBED_KEY` environment variable (secret). See `AURI_GUIDE.md`.
 
+## Downloads and counting
+Download buttons point to `/api/download?p=<slug>&os=<platform>&v=<version>&r=<release index>` (`app/api/download/route.ts`). It redirects to the release URL saved in the admin (never to an address from the request) and adds one to `download_counts` (one per visitor per file per 10 minutes; crawlers and HEAD requests are ignored). Counts show in Admin > Overview. The product page picks the visitor's platform from their browser and offers the newest release for it; for a platform with no build it says so. Add a new version in Admin > Products as another release; the newest by date is offered first.
+
 ## SEO
 Per-product titles, descriptions, structured data, `sitemap.xml` and `robots.txt` are generated from the database (`lib/seo.ts`, `app/sitemap.ts`, `app/robots.ts`, `app/route-page.tsx`). See `SEO_GUIDE.md`. The route file `app/[[...slug]]/page.tsx` is deliberately tiny: Next.js needs `revalidate` written in that file, everything else is in `app/route-page.tsx`.
 
