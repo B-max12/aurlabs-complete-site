@@ -139,6 +139,16 @@ body:has(.public-site) { background: #fff; }
 .public-site .phones .phone > p { color: #3d2a1a; }
 .public-site .article-art .art-small { color: #3b2b20; opacity: 1; }
 
+/* Download call to action */
+.public-site .download-cta { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.public-site .download-meta { margin: 0; font-size: 13px; line-height: 1.5; color: var(--muted); }
+.public-site .download-meta .text-link { display: inline; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; background: none; padding: 0; }
+.public-site .download-note { margin: 0; max-width: 360px; font-size: 13px; line-height: 1.55; color: var(--muted); }
+.public-site .release-help { margin-top: 12px; font-size: 13px; }
+.public-site .release-help summary { cursor: pointer; font-weight: 500; color: var(--ink); }
+.public-site .release-help p { margin: 8px 0 4px; font-size: 13px; line-height: 1.5; }
+.public-site .release-help code { display: block; padding: 10px 12px; background: var(--st-wash); border: 1px solid var(--line); border-radius: 8px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; color: var(--ink); overflow-x: auto; white-space: pre; }
+
 /* Product page FAQ */
 .public-site .product-faq { margin-top: 40px; padding-top: 8px; }
 .public-site .product-faq h2 { font-size: clamp(24px, 2.4vw, 30px); margin-bottom: 14px; }
@@ -314,4 +324,3 @@ body:has(.public-site) { background: #fff; }
   .public-site .visitor-account { margin-left: 8px; }
   .visitor-dialog { padding: 24px; }
 }
-
