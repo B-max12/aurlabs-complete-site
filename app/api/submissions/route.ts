@@ -19,4 +19,3 @@ export async function POST(req:Request){
     return json({ok:true,reference:idempotencyKey.slice(0,8)},201);
   }catch(error){console.error("Submission failed",error instanceof Error?error.message:"unknown");return json({error:"Your message wasn’t saved. Please try again or email the team directly."},503);}
 }
-
