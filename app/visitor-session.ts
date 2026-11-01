@@ -115,4 +115,3 @@ export async function sendEmailLink(email: string) {
   if (r.status === 429) throw new Error("Too many requests. Please wait a minute and try again.");
   throw new Error(msg ? msg.slice(0, 160) : "We couldn’t send the link. Please try again.");
 }
-
