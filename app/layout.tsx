@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const inter = localFont({ src: "./fonts/inter-latin-wght-normal.woff2", variable: "--font-inter", display: "swap", weight: "100 900" });
@@ -23,11 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="antialiased">
-        {children}
-        <Analytics />
-      </body>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }
-
