@@ -118,4 +118,3 @@ export function starterEntries(p: Product): EntryInput[] {
   p.features.slice(0, 12).forEach((f, i) => out.push(draft("feature-" + i, "feature", `What is "${f}" in ${n}?`, `Add the full details of "${f}": what it does, how to use it, and when it helps.`, [`How does ${f} work in ${n}?`, `Tell me about ${f}`])));
   return out;
 }
-
