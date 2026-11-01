@@ -15,4 +15,3 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   } catch { /* the fixed pages above are still listed */ }
   return items;
 }
-
