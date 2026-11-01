@@ -72,4 +72,3 @@ export default function Auri({guides={},admin=false}:{guides?:Record<string,stri
   </dialog>}
  </div>;
 }
-
