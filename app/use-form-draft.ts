@@ -24,4 +24,3 @@ export async function submitForm(data:unknown){
  if(!response.ok||!result.reference)throw new Error(result.error||'The server could not confirm your submission. Please retry.');
  return result.reference;
 }
-
