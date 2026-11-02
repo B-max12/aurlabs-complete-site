@@ -66,7 +66,7 @@ export function productJsonLd(p: Product) {
 export const organizationJsonLd = () => ({
   "@context": "https://schema.org",
   "@graph": [
-    { "@type": "Organization", "@id": SITE + "/#org", name: "Aur Labs", url: SITE, logo: SITE + "/favicon.svg", description: "An independent, non-profit software lab building useful free tools for people everywhere." },
+    { "@type": "Organization", "@id": SITE + "/#org", name: "Aur Labs", url: SITE, logo: SITE + "/favicon.svg", description: "An independent, non-profit software lab building useful free tools for people everywhere.", email: "aur@aurlabs.online", contactPoint: { "@type": "ContactPoint", contactType: "customer support", email: "aur@aurlabs.online", availableLanguage: "English" } },
     { "@type": "WebSite", "@id": SITE + "/#site", name: "Aur Labs", url: SITE, publisher: { "@id": SITE + "/#org" } },
   ],
 });
