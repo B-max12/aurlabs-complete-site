@@ -35,3 +35,11 @@ Leave a field empty and the name, tagline and description are used instead.
 - The old "meta keywords" tag: Google ignores it.
 - Repeating the phrase unnaturally, or many near-identical pages for each platform or keyword.
 - Claiming features the product does not have.
+
+## Search engines other than Google
+- **Brave Search** has its own independent index. Submit pages at https://search.brave.com/submit-url (one URL at a time), and get a few links to the site from other places. A new domain can take weeks to appear.
+- **Bing**: add the site in Bing Webmaster Tools (import from Search Console) and submit `https://aurlabs.online/sitemap.xml`.
+- Social previews use `public/og-default.png` unless a page has its own image (products use their first screenshot, articles their cover).
+
+## Structured data on the site
+Organization and WebSite (home), SoftwareApplication + Product + BreadcrumbList + FAQPage (product pages), Article + BreadcrumbList (journal and research articles), ItemList (products, journal and research lists). Add the GitHub organization link in Site settings (GitHub link) so it is published as `sameAs`.
