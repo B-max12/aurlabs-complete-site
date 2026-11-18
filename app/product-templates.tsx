@@ -12,6 +12,7 @@ import {
   FileText,
   Monitor,
   Plus,
+  Share2,
   Shield,
   Smartphone,
   Terminal,
@@ -131,6 +132,19 @@ function ProductPageShell({
   product: Product;
   content?: SiteContent;
 }) {
+  const [shared, setShared] = useState(false);
+  const faqsCount = parseFaq(product.faq).length;
+
+  const copyShareUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setShared(true);
+      setTimeout(() => setShared(false), 2000);
+    } catch {
+      helpAuri("Copy the page URL from your browser address bar to share this tool.");
+    }
+  };
+
   return (
     <div className={`public-site product-landing template-${product.category}`}>
       <a href="#main" className="skip-link">
@@ -147,6 +161,22 @@ function ProductPageShell({
             <i />
             {statusLabel(product.status)}
           </span>
+          <div className="pl-breadcrumb-actions">
+            <div className="pl-jump-links" aria-label="Jump to section">
+              <a href="#features">Features</a>
+              {product.releases.length > 0 && <a href="#downloads">Downloads</a>}
+              {faqsCount > 0 && <a href="#faq">FAQ</a>}
+              <a href="#ask-auri">Ask Auri</a>
+            </div>
+            <button
+              type="button"
+              className={shared ? "pl-share-btn copied" : "pl-share-btn"}
+              onClick={copyShareUrl}
+            >
+              {shared ? <Check size={13} /> : <Share2 size={13} />}
+              {shared ? "Link copied" : "Copy link"}
+            </button>
+          </div>
         </div>
         {children}
       </main>
@@ -259,10 +289,13 @@ function PrimaryCtaBlock({
   const hasReleases = product.status === "released" && product.releases.length > 0;
 
   if (!hasReleases) {
+    const contactHref = `/contact?product=${encodeURIComponent(product.name)}&topic=${encodeURIComponent(
+      product.status === "released" ? "Product support" : "A problem to solve"
+    )}`;
     return (
       <div className="pl-cta-wrap">
         <div className="pl-cta">
-          <Link href="/contact" className="button orange">
+          <Link href={contactHref} className="button orange">
             {product.status === "released" ? "Ask about a download" : "Share your feedback"}
           </Link>
           {product.repository && (
@@ -382,7 +415,12 @@ function ProductOverviewAndDownloads({
           <h2>Screenshots</h2>
           <div className="pl-screenshot-grid">
             {product.screenshots.map((src, i) => (
-              <img key={src + i} src={src} alt={`${product.name} screenshot ${i + 1}`} loading="lazy" />
+              <MediaImage
+                key={src + i}
+                src={src}
+                alt={`${product.name} screenshot ${i + 1}`}
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
             ))}
           </div>
         </section>
@@ -440,7 +478,7 @@ function ProductOverviewAndDownloads({
       )}
 
       {faqs.length > 0 && (
-        <section className="pl-faq">
+        <section className="pl-faq" id="faq">
           <h2>Frequently Asked Questions</h2>
           {faqs.map((item, i) => (
             <details key={i}>
@@ -451,7 +489,7 @@ function ProductOverviewAndDownloads({
         </section>
       )}
 
-      <section className="pl-auri-section" aria-label={`Questions about ${product.name}`}>
+      <section className="pl-auri-section" id="ask-auri" aria-label={`Questions about ${product.name}`}>
         <div className="pl-auri-inner">
           <h2>Questions about {product.name}?</h2>
           <p>Ask Auri to search our team-written notes and product guides.</p>
@@ -541,7 +579,7 @@ export function DesktopSoftwareTemplate({
         </div>
       </section>
 
-      <section className="pl-features">
+      <section className="pl-features" id="features">
         <h2>
           {product.status === "released"
             ? `Why ${product.name}?`
@@ -611,7 +649,7 @@ export function MobileAppTemplate({
         </div>
       </section>
 
-      <section className="pl-features">
+      <section className="pl-features" id="features">
         <h2>Designed for mobile</h2>
         <div className="pl-features-grid mobile-features">
           {product.features.map((feature, i) => (
@@ -735,7 +773,7 @@ ${product.slug} start`;
         </div>
       </section>
 
-      <section className="pl-features cli-features">
+      <section className="pl-features cli-features" id="features">
         <h2>Developer-friendly</h2>
         <div className="pl-features-grid">
           {product.features.map((feature, i) => (

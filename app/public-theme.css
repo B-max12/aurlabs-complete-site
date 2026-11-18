@@ -537,3 +537,73 @@ body:has(.public-site) { background: #fff; }
   font-size: 13px;
   line-height: 1.65;
 }
+
+/* Monochrome form UX, draft bar, character counters & article polish */
+.public-site .draft-notice {
+  background: var(--st-wash);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.public-site .draft-notice label,
+.public-site .draft-notice button {
+  font-size: 12px;
+  color: var(--ink);
+}
+.public-site .form-progress > div.active > span {
+  background: var(--ink);
+  color: #fff;
+}
+.public-site .form-progress > div > p {
+  font-size: 13px;
+  font-weight: 500;
+}
+.public-site .success-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--st-shadow);
+}
+.public-site .char-count {
+  margin-left: auto;
+  margin-right: 6px;
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.public-site .char-count.ok {
+  color: #16a34a;
+  font-weight: 500;
+}
+.public-site .byline > button.copy-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: auto;
+  height: auto;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--st-wash);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.public-site .byline > button.copy-pill:hover {
+  background: #efefef;
+}
+.public-site .byline > button.copy-pill.copied {
+  border-color: #16a34a;
+  background: #ecfdf3;
+  color: #067647;
+}
+.public-site .article-more {
+  margin-top: 56px;
+  padding-top: 40px;
+  border-top: 1px solid var(--line);
+}
+.public-site .article-more h2 {
+  font-size: clamp(24px, 2.8vw, 32px);
+  margin-bottom: 24px;
+}
