@@ -536,7 +536,9 @@ export function DesktopSoftwareTemplate({
           </div>
         </div>
 
-        <ProductHeroVisual product={product} />
+        <div className="pl-hero-showcase">
+          <ProductHeroVisual product={product} />
+        </div>
       </section>
 
       <section className="pl-features">
@@ -548,7 +550,9 @@ export function DesktopSoftwareTemplate({
         <div className="pl-features-grid">
           {product.features.map((feature, i) => (
             <div key={i} className="pl-feature-card">
-              <Check size={20} />
+              <span className="pl-feature-icon" aria-hidden="true">
+                <Check size={18} />
+              </span>
               <p>{feature}</p>
             </div>
           ))}
@@ -602,7 +606,9 @@ export function MobileAppTemplate({
           </div>
         </div>
 
-        <ProductHeroVisual product={product} />
+        <div className="pl-hero-showcase">
+          <ProductHeroVisual product={product} />
+        </div>
       </section>
 
       <section className="pl-features">
@@ -610,7 +616,9 @@ export function MobileAppTemplate({
         <div className="pl-features-grid mobile-features">
           {product.features.map((feature, i) => (
             <div key={i} className="pl-feature-card">
-              <Check size={20} />
+              <span className="pl-feature-icon" aria-hidden="true">
+                <Check size={18} />
+              </span>
               <p>{feature}</p>
             </div>
           ))}
@@ -688,19 +696,22 @@ ${product.slug} start`;
           </h1>
           <p className="pl-tagline">{product.tagline}</p>
 
-          {isReleased && (
-            <div className="cli-install">
-              <code>
-                <span className="prompt">$</span> npm install -g {product.slug}
-              </code>
-              <button
-                type="button"
-                className="copy-btn"
-                onClick={() => copy(`npm install -g ${product.slug}`, "cli-install")}
-              >
-                {copiedKey === "cli-install" ? "Copied ✓" : "Copy"}
-              </button>
-            </div>
+          <div className="cli-install">
+            <code>
+              <span className="prompt">$</span> npm install -g {product.slug}
+            </code>
+            <button
+              type="button"
+              className={copiedKey === "cli-install" ? "copy-btn copied" : "copy-btn"}
+              onClick={() => copy(`npm install -g ${product.slug}`, "cli-install")}
+            >
+              {copiedKey === "cli-install" ? "Copied ✓" : "Copy"}
+            </button>
+          </div>
+          {!isReleased && (
+            <p className="pl-cli-preview-note">
+              Illustrative CLI preview — commands will work once {product.name} is released.
+            </p>
           )}
 
           <p className="pl-description">{product.description.split("\n\n")[0]}</p>
@@ -719,7 +730,9 @@ ${product.slug} start`;
           </div>
         </div>
 
-        <ProductHeroVisual product={product} />
+        <div className="pl-hero-showcase">
+          <ProductHeroVisual product={product} />
+        </div>
       </section>
 
       <section className="pl-features cli-features">
@@ -727,29 +740,45 @@ ${product.slug} start`;
         <div className="pl-features-grid">
           {product.features.map((feature, i) => (
             <div key={i} className="pl-feature-card">
-              <Terminal size={20} />
+              <span className="pl-feature-icon" aria-hidden="true">
+                <Terminal size={18} />
+              </span>
               <p>{feature}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {isReleased && (
-        <section className="pl-quickstart">
-          <h2>Quick Start</h2>
-          <div className="code-block">
-            <div className="code-header">
+      <section className="pl-quickstart">
+        <h2>Quick Start</h2>
+        <div className="code-block">
+          <div className="code-header">
+            <div className="code-title">
+              <span className="code-dots" aria-hidden="true">
+                <i />
+                <i />
+                <i />
+              </span>
               <span>bash</span>
-              <button type="button" onClick={() => copy(quickstartSnippet, "cli-quickstart")}>
-                {copiedKey === "cli-quickstart" ? "Copied ✓" : "Copy"}
-              </button>
             </div>
-            <pre>
-              <code>{quickstartSnippet}</code>
-            </pre>
+            <button
+              type="button"
+              className={copiedKey === "cli-quickstart" ? "copied" : ""}
+              onClick={() => copy(quickstartSnippet, "cli-quickstart")}
+            >
+              {copiedKey === "cli-quickstart" ? "Copied ✓" : "Copy"}
+            </button>
           </div>
-        </section>
-      )}
+          <pre>
+            <code>{quickstartSnippet}</code>
+          </pre>
+        </div>
+        {!isReleased && (
+          <p className="pl-cli-preview-note center">
+            Example workflow preview. Verify the published package documentation upon release.
+          </p>
+        )}
+      </section>
 
       <ProductOverviewAndDownloads
         product={product}

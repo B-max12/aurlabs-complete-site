@@ -324,3 +324,216 @@ body:has(.public-site) { background: #fff; }
   .public-site .visitor-account { margin-left: 8px; }
   .visitor-dialog { padding: 24px; }
 }
+
+/* ============ UI Polish: Lab Workbench, Cards, Type Scale & Surfaces ============ */
+.public-site .lab-workbench {
+  transform: none !important;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--st-shadow);
+  padding: 0 20px;
+}
+.public-site .workbench-toolbar {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+.public-site .workbench-toolbar > span:last-child { font-size: 11px; }
+.public-site .workbench-tabs {
+  background: var(--st-wash);
+  margin: 0 -20px;
+  padding: 8px 14px;
+  gap: 6px;
+  border-block: 1px solid var(--line);
+}
+.public-site .workbench-tabs > button {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  border-radius: 9px;
+  padding: 9px 12px;
+}
+.public-site .workbench-tabs > button.selected {
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+.public-site .workbench-summary h2 {
+  font-size: 20px;
+  font-weight: 600;
+  max-width: 340px;
+}
+.public-site .workbench-summary > a {
+  background: var(--st-wash);
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+.public-site .workbench-summary > a:hover {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+.public-site .workbench-foot { font-size: 12px; color: var(--muted); }
+.public-site .workbench-caption { font-family: inherit; font-size: 11px; letter-spacing: 0.04em; color: var(--muted); }
+
+/* Framed product & article cards */
+.public-site .product-card,
+.public-site .article-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.public-site .product-card:hover,
+.public-site .article-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--st-shadow);
+  border-color: var(--st-line2);
+}
+.public-site .product-card .platform-labels {
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+/* Readable typography scale */
+.public-site .product-card-top { font-size: 13px; margin: 16px 0 8px; }
+.public-site .status-pill {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.public-site .product-name { font-size: 22px; }
+.public-site .platform-labels > span {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--st-wash);
+  border-color: var(--line);
+  color: var(--muted);
+}
+.public-site .platform-labels > .product-free {
+  font-size: 13px;
+  font-weight: 600;
+  background: transparent;
+  padding-right: 0;
+  color: var(--ink);
+}
+.public-site .product-card > p,
+.public-site .article-card > p {
+  font-size: 14px;
+  line-height: 1.65;
+  margin: 8px 0 16px;
+}
+.public-site .platform-filters > button {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 999px;
+}
+.public-site .platform-filters > button.selected {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+.public-site .category-tabs > button {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 16px;
+  border-radius: 10px;
+}
+.public-site .results-bar,
+.public-site .results-bar select,
+.public-site .filter-reset,
+.public-site .catalogue-note {
+  font-size: 13px;
+}
+.public-site .mission-copy > p,
+.public-site .invitation p,
+.public-site .about-manifesto .prose,
+.public-site .join-sidebar > p,
+.public-site .contact-layout aside > p,
+.public-site .donation-transparency > div > p {
+  font-size: 15px;
+  line-height: 1.75;
+}
+.public-site .mission-values > span,
+.public-site .support-strip p,
+.public-site .value-item p,
+.public-site .team-card > p,
+.public-site .join-benefit p,
+.public-site .support-uses p,
+.public-site .faq-list details > p {
+  font-size: 14px;
+  line-height: 1.7;
+}
+.public-site .join-benefit b,
+.public-site .support-uses b,
+.public-site .faq-list summary {
+  font-size: 15px;
+  font-weight: 500;
+}
+.public-site .footer-top h3 { font-size: 13px; font-weight: 600; }
+.public-site .footer-top > div:not(:first-child):not(:last-child) > a,
+.public-site .footer-email {
+  font-size: 14px;
+}
+
+/* Monochrome surfaces for secondary pages & Auri */
+.public-site :is(.application-form, .contact-form, .donation-form) {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--st-shadow);
+}
+.public-site :is(.about-manifesto > div:first-child, .support-art, .contact-orbit, .empty-state, .feature-panel) {
+  background: var(--st-wash);
+  border: 1px solid var(--line);
+}
+.public-site .team-join {
+  background: var(--st-wash);
+  border: 1px dashed var(--st-line2);
+  border-radius: 18px;
+}
+.public-site .segmented {
+  background: var(--st-wash);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.public-site .amount-grid > button {
+  border-radius: 10px;
+  font-weight: 500;
+}
+.public-site .amount-grid > button.selected {
+  border-color: var(--ink);
+  background: var(--st-wash);
+  color: var(--ink);
+  font-weight: 600;
+}
+.public-site .auri-launcher > span:last-child:not(.auri-character) {
+  background: #fff;
+  border: 1px solid var(--line);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+  box-shadow: var(--st-shadow);
+}
+.public-site :is(.auri-welcome, .auri-context, .auri-dialog) {
+  background: #fff;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  box-shadow: var(--st-shadow);
+}
+.public-site .auri-context p,
+.public-site .auri-intro p,
+.public-site .auri-faq details p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
