@@ -121,7 +121,7 @@ export default async function Page({ params }: Props) {
             type="application/ld+json"
             dangerouslySetInnerHTML={jsonLdScript(generateBreadcrumbJsonLd(product))}
           />
-          <ProductTemplate product={product} />
+          <ProductTemplate product={product} content={content} />
         </>
       );
     }

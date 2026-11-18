@@ -75,13 +75,14 @@ export const jsonLdScript = (data: unknown) => ({ __html: JSON.stringify(data).r
 
 export function generateProductJsonLd(product: Product) {
   const baseUrl = SITE;
+  const release = latestRelease(product);
 
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     name: product.name,
     alternateName: product.tagline,
-    description: product.seoDescription || product.description.split("\n\n")[0],
+    description: productDescription(product),
     url: `${baseUrl}/${product.slug}`,
     applicationCategory:
       product.category === "app"
@@ -90,38 +91,39 @@ export function generateProductJsonLd(product: Product) {
           ? "DeveloperApplication"
           : "DesktopApplication",
     operatingSystem: product.platforms.join(", "),
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "USD",
-      availability: "https://schema.org/InStock",
-      description: "Free and open source",
-    },
+    ...(product.status === "released"
+      ? {
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD",
+            availability: "https://schema.org/InStock",
+            description: "Free software",
+          },
+          isAccessibleForFree: true,
+        }
+      : {}),
     author: {
       "@type": "Organization",
       name: "Aur Labs",
       url: baseUrl,
       logo: `${baseUrl}/assets/aur-sculpture.png`,
     },
-    license: product.license,
-    screenshot: product.screenshots.map((s) => (s.startsWith("http") ? s : `${baseUrl}${s}`)),
-    softwareVersion: product.releases[0]?.version || "1.0.0",
-    datePublished: product.releases[0]?.date || new Date().toISOString().split("T")[0],
-    downloadUrl: product.releases[0]?.url || `${baseUrl}/${product.slug}`,
-    aggregateRating:
-      product.releases.length > 0
-        ? {
-            "@type": "AggregateRating",
-            ratingValue: "4.8",
-            ratingCount: "127",
-            bestRating: "5",
-            worstRating: "1",
-          }
-        : undefined,
+    ...(product.license ? { license: product.license } : {}),
+    ...(product.screenshots.length > 0
+      ? { screenshot: product.screenshots.map((s) => (s.startsWith("http") ? s : `${baseUrl}${s}`)) }
+      : {}),
+    ...(release
+      ? {
+          softwareVersion: release.version,
+          datePublished: release.date,
+          downloadUrl: release.url,
+        }
+      : {}),
+    ...(product.repository ? { codeRepository: product.repository } : {}),
     featureList: product.features.join(", "),
     keywords: product.keyword || product.name,
     inLanguage: "en",
-    isAccessibleForFree: true,
     isPartOf: {
       "@type": "WebSite",
       name: "Aur Labs",
@@ -131,24 +133,20 @@ export function generateProductJsonLd(product: Product) {
 }
 
 export function generateFaqJsonLd(product: Product) {
-  if (!product.faq) return null;
-
-  const faqs = product.faq.split("\n\n").map((qa) => {
-    const [question, ...answerParts] = qa.split("\n");
-    return {
-      "@type": "Question",
-      name: question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: answerParts.join(" "),
-      },
-    };
-  });
+  const faqs = parseFaq(product.faq);
+  if (faqs.length === 0) return null;
 
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: faqs,
+    mainEntity: faqs.map(({ q, a }) => ({
+      "@type": "Question",
+      name: q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: a,
+      },
+    })),
   };
 }
 

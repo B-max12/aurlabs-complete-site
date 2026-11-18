@@ -2,7 +2,13 @@ import { json, parseBody, sameOrigin, clientIp, rateLimit } from "@/lib/server";
 import { search, logUnanswered, suggestions, type Hit } from "@/lib/kb";
 
 export const runtime = "nodejs";
-const productFrom = (path: string) => { const m = /^\/products\/([a-z0-9-]{1,80})/.exec(path || ""); return m ? m[1] : ""; };
+const RESERVED_PATHS = new Set(["products", "about", "journal", "research", "join", "support", "contact", "privacy", "terms", "admin"]);
+const productFrom = (path: string) => {
+  const legacy = /^\/products\/([a-z0-9-]{1,80})/.exec(path || "");
+  if (legacy) return legacy[1];
+  const root = /^\/([a-z0-9-]{1,80})\/?$/.exec(path || "");
+  return root && !RESERVED_PATHS.has(root[1]) ? root[1] : "";
+};
 const brief = (h: Hit) => ({ question: h.question });
 
 /** Starting-point questions for the page the visitor is on. */
@@ -21,7 +27,7 @@ export async function POST(req: Request) {
   try {
     const r = await search(question, productFrom(typeof b.path === "string" ? b.path : ""));
     if (r.status !== "answer") await logUnanswered(question).catch(() => undefined);
-    if (r.status === "answer") return json({ status: "answer", question: r.hit.question, answer: r.hit.answer, kind: r.hit.kind, href: r.hit.product_slug ? "/products/" + r.hit.product_slug : null, related: r.related.map(brief) });
+    if (r.status === "answer") return json({ status: "answer", question: r.hit.question, answer: r.hit.answer, kind: r.hit.kind, href: r.hit.product_slug ? "/" + r.hit.product_slug : null, related: r.related.map(brief) });
     return json({ status: r.status, related: r.related.map(brief) });
   } catch {
     return json({ error: "Auri couldn’t look that up right now. Please try again, or contact the team." }, 503);

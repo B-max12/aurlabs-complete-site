@@ -18,14 +18,14 @@ async function handle(req: Request, count: boolean) {
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return back("/products");
 
   let product;
-  try { product = (await readContent()).products.find((p) => p.slug === slug); } catch { return back("/products/" + slug); }
+  try { product = (await readContent()).products.find((p) => p.slug === slug); } catch { return back("/" + slug); }
   if (!product) return back("/products");
 
   const byIndex = Number.isInteger(index) ? product.releases[index] : undefined;
   const release = byIndex && byIndex.platform === os && byIndex.version === version
     ? byIndex
     : [...product.releases].filter((r) => r.platform === os && (!version || r.version === version)).sort((a, b) => b.date.localeCompare(a.date))[0];
-  if (!release || !/^https:\/\//.test(release.url)) return back("/products/" + slug);
+  if (!release || !/^https:\/\//.test(release.url)) return back("/" + slug);
 
   if (count && !NOT_PEOPLE.test(req.headers.get("user-agent") || "") && !req.headers.get("sec-purpose")) {
     try {

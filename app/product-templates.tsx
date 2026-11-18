@@ -1,52 +1,485 @@
 "use client";
 
-import type { ReactNode } from "react";
-import type { Product } from "@/lib/content";
-import { Download, Smartphone, Terminal, Monitor, Check, Shield, FileText, Star } from "lucide-react";
-import { Mark } from "./visuals";
+import Link from "next/link";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  ArrowLeft,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Copy,
+  Download,
+  FileText,
+  Monitor,
+  Plus,
+  Shield,
+  Smartphone,
+  Terminal,
+  X,
+} from "lucide-react";
+import {
+  defaultContent,
+  statusLabel,
+  categoryLabel,
+  type Product,
+  type Release,
+  type SiteContent,
+} from "@/lib/content";
+import { parseFaq } from "@/lib/seo";
+import { ProductVisual } from "./visuals";
+import { MediaImage } from "./media-image";
+import { helpAuri } from "./auri-help";
+import {
+  Header,
+  Footer,
+  DeferredAuri,
+  ReleaseHelp,
+  downloadHref,
+  fileExt,
+} from "./site";
+import "./public-theme.css";
 
 function GithubIcon({ size = 18 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
       <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
       <path d="M9 18c-4.51 2-5-2-7-2" />
     </svg>
   );
 }
 
-function ProductPageShell({ children, product }: { children: ReactNode; product: Product }) {
+function useDetectedPlatform(product: Product) {
+  const [detected, setDetected] = useState("");
+  const [platform, setPlatform] = useState(
+    product.releases[0]?.platform || product.platforms[0] || ""
+  );
+
+  useEffect(() => {
+    const ua = navigator.userAgent;
+    const os = /Android/i.test(ua)
+      ? "Android"
+      : /iPhone|iPad/i.test(ua)
+        ? "iOS"
+        : /Mac/i.test(ua)
+          ? "macOS"
+          : /Win/i.test(ua)
+            ? "Windows"
+            : /Linux/i.test(ua)
+              ? "Linux"
+              : "";
+    setDetected(os);
+    if (os && (product.releases.some((r) => r.platform === os) || product.platforms.includes(os))) {
+      setPlatform(os);
+    }
+  }, [product.id, product.platforms, product.releases]);
+
+  return { detected, platform, setPlatform };
+}
+
+function latestReleaseIndex(product: Product, platform: string) {
+  let best = -1;
+  product.releases.forEach((r, i) => {
+    if (r.platform === platform && (best < 0 || r.date > product.releases[best].date)) {
+      best = i;
+    }
+  });
+  return best;
+}
+
+function useClipboard() {
+  const [copiedKey, setCopiedKey] = useState("");
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+
+  const copy = async (value: string, key = value) => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopiedKey(key);
+      if (timerRef.current) clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => setCopiedKey(""), 2000);
+    } catch {
+      helpAuri("Clipboard access is unavailable. You can select and copy the text directly.");
+    }
+  };
+
+  return { copiedKey, copy };
+}
+
+function ProductPageShell({
+  children,
+  product,
+  content = defaultContent,
+}: {
+  children: ReactNode;
+  product: Product;
+  content?: SiteContent;
+}) {
   return (
-    <div className={`product-landing template-${product.category}`}>
-      <header className="pl-header">
-        <nav className="pl-nav">
-          <a href="/" className="brand">
-            <Mark />
-            <span>Aur Labs</span>
-          </a>
-          <div className="pl-nav-links">
-            <a href="/products">All Products</a>
-            <a href="/about">About</a>
-            <a href="/support">Support</a>
-          </div>
-        </nav>
-      </header>
-      {children}
-      <footer className="pl-footer">
-        <p>© 2026 Aur Labs. Free software for everyone.</p>
-        <div className="pl-footer-links">
-          <a href="/privacy">Privacy</a>
-          <a href="/terms">Terms</a>
-          <a href="/contact">Contact</a>
+    <div className={`public-site product-landing template-${product.category}`}>
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
+      <Header content={content} path={"/" + product.slug} />
+      <main id="main">
+        <div className="section-wrap detail-breadcrumb">
+          <Link href="/products">
+            <ArrowLeft size={14} /> All products
+          </Link>
+          <span>{categoryLabel(product.category)}</span>
+          <span className={`status-pill ${product.status}`}>
+            <i />
+            {statusLabel(product.status)}
+          </span>
         </div>
-      </footer>
+        {children}
+      </main>
+      <Footer content={content} />
+      <DeferredAuri guides={content.settings.auriGuides} />
     </div>
   );
 }
 
-/** Product landing template for desktop software tools. */
-export function DesktopSoftwareTemplate({ product }: { product: Product }) {
+function ProductHeroVisual({ product }: { product: Product }) {
+  const [shot, setShot] = useState(0);
+  const dialog = useRef<HTMLDialogElement>(null);
+
+  if (product.screenshots.length === 0) {
+    return <ProductVisual product={product} large priority />;
+  }
+
   return (
-    <ProductPageShell product={product}>
+    <div className="detail-showcase">
+      <button
+        type="button"
+        className="screenshot-main"
+        onClick={() => dialog.current?.showModal()}
+        aria-label="Enlarge screenshot"
+      >
+        <MediaImage
+          src={product.screenshots[shot]}
+          alt={`${product.name} screenshot ${shot + 1}`}
+          priority
+          sizes="(max-width: 900px) 100vw, 60vw"
+        />
+        <span>
+          <Plus size={18} /> Explore screenshot
+        </span>
+      </button>
+      {product.screenshots.length > 1 && (
+        <div className="screenshot-thumbs">
+          {product.screenshots.map((src, i) => (
+            <button
+              key={src + i}
+              type="button"
+              className={i === shot ? "active" : ""}
+              onClick={() => setShot(i)}
+              aria-label={`View screenshot ${i + 1}`}
+            >
+              <MediaImage src={src} alt="" thumb />
+            </button>
+          ))}
+        </div>
+      )}
+      <dialog
+        className="lightbox"
+        ref={dialog}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) dialog.current?.close();
+        }}
+      >
+        <button
+          type="button"
+          className="lightbox-close icon-button"
+          onClick={() => dialog.current?.close()}
+          aria-label="Close screenshot"
+        >
+          <X />
+        </button>
+        <MediaImage
+          src={product.screenshots[shot]}
+          alt={`${product.name} screenshot ${shot + 1}`}
+          sizes="100vw"
+        />
+        {product.screenshots.length > 1 && (
+          <div className="lightbox-controls">
+            <button
+              type="button"
+              aria-label="Previous screenshot"
+              onClick={() =>
+                setShot((s) => (s - 1 + product.screenshots.length) % product.screenshots.length)
+              }
+            >
+              <ChevronLeft />
+            </button>
+            <span>
+              {shot + 1} / {product.screenshots.length}
+            </span>
+            <button
+              type="button"
+              aria-label="Next screenshot"
+              onClick={() => setShot((s) => (s + 1) % product.screenshots.length)}
+            >
+              <ChevronRight />
+            </button>
+          </div>
+        )}
+      </dialog>
+    </div>
+  );
+}
+
+function PrimaryCtaBlock({
+  product,
+  detected,
+  platform,
+  labelPrefix = "Download for",
+}: {
+  product: Product;
+  detected: string;
+  platform: string;
+  labelPrefix?: string;
+}) {
+  const hasReleases = product.status === "released" && product.releases.length > 0;
+
+  if (!hasReleases) {
+    return (
+      <div className="pl-cta-wrap">
+        <div className="pl-cta">
+          <Link href="/contact" className="button orange">
+            {product.status === "released" ? "Ask about a download" : "Share your feedback"}
+          </Link>
+          {product.repository && (
+            <a
+              href={product.repository}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="button light"
+            >
+              <GithubIcon size={18} />
+              Source
+            </a>
+          )}
+        </div>
+        <p className="pl-status-note">
+          {product.status === "concept"
+            ? `${product.name} is an illustrative concept preview. No download is available yet.`
+            : `${product.name} is currently in development. Check back soon or reach out to help test.`}
+        </p>
+      </div>
+    );
+  }
+
+  const available = [...new Set(product.releases.map((r) => r.platform))];
+  const target = detected ? (available.includes(detected) ? detected : "") : platform;
+  const idx = target ? latestReleaseIndex(product, target) : -1;
+
+  return (
+    <div className="pl-cta-wrap">
+      <div className="pl-cta">
+        {idx >= 0 ? (
+          <a href={downloadHref(product, idx)} rel="nofollow" className="button orange">
+            <Download size={18} />
+            {labelPrefix} {product.releases[idx].platform}
+          </a>
+        ) : (
+          <a href="#downloads" className="button orange">
+            <Download size={18} />
+            See available downloads
+          </a>
+        )}
+        {product.repository && (
+          <a
+            href={product.repository}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="button light"
+          >
+            <GithubIcon size={18} />
+            Source
+          </a>
+        )}
+      </div>
+      {idx >= 0 ? (
+        <p className="download-meta">
+          v{product.releases[idx].version.replace(/^v/i, "")} · {product.releases[idx].architecture}
+          {fileExt(product.releases[idx].url) ? ` · ${fileExt(product.releases[idx].url)}` : ""} ·{" "}
+          <a href="#downloads" className="text-link">
+            All builds &amp; checksums
+          </a>
+        </p>
+      ) : (
+        detected && (
+          <p className="download-note">
+            {product.name} isn’t available for {detected} yet. Builds exist for{" "}
+            {available.join(", ")}.
+          </p>
+        )
+      )}
+    </div>
+  );
+}
+
+function ProductOverviewAndDownloads({
+  product,
+  platform,
+  setPlatform,
+  copiedKey,
+  copy,
+}: {
+  product: Product;
+  platform: string;
+  setPlatform: (p: string) => void;
+  copiedKey: string;
+  copy: (value: string, key?: string) => void;
+}) {
+  const paragraphs = product.description.split("\n\n").filter(Boolean);
+  const faqs = parseFaq(product.faq);
+  const releasesForPlatform = product.releases.filter((r) => r.platform === platform);
+  const displayedReleases: { release: Release; index: number }[] = (
+    releasesForPlatform.length > 0 ? releasesForPlatform : product.releases
+  ).map((release) => ({
+    release,
+    index: product.releases.indexOf(release),
+  }));
+
+  return (
+    <>
+      {paragraphs.length > 1 && (
+        <section className="pl-about">
+          <div className="pl-about-inner prose">
+            <h2>About {product.name}</h2>
+            {paragraphs.map((p, i) => (
+              <p key={i}>{p}</p>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {product.screenshots.length > 1 && (
+        <section className="pl-screenshots">
+          <h2>Screenshots</h2>
+          <div className="pl-screenshot-grid">
+            {product.screenshots.map((src, i) => (
+              <img key={src + i} src={src} alt={`${product.name} screenshot ${i + 1}`} loading="lazy" />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {product.releases.length > 0 && (
+        <section className="pl-downloads" id="downloads">
+          <h2>Download {product.name}</h2>
+          <div className="pl-release-list">
+            <div className="platform-filters" role="group" aria-label="Filter releases by platform">
+              {[...new Set(product.releases.map((r) => r.platform))].map((p) => (
+                <button
+                  key={p}
+                  type="button"
+                  className={p === platform ? "selected" : ""}
+                  onClick={() => setPlatform(p)}
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+            {displayedReleases.map(({ release, index }) => (
+              <div key={index} className="pl-release-card">
+                <div className="pl-release-info">
+                  <strong>
+                    {release.platform} · v{release.version.replace(/^v/i, "")}
+                  </strong>
+                  <span>
+                    {release.architecture} · Released {release.date}
+                  </span>
+                  {release.requirements && <small>{release.requirements}</small>}
+                  {release.notes && <p className="pl-release-notes">{release.notes}</p>}
+                  {release.checksum && (
+                    <button
+                      type="button"
+                      className="checksum"
+                      onClick={() => copy(release.checksum, `chk-${index}`)}
+                    >
+                      <Copy size={13} />
+                      <span>
+                        {copiedKey === `chk-${index}` ? "Copied SHA-256 ✓" : release.checksum}
+                      </span>
+                    </button>
+                  )}
+                  <ReleaseHelp r={release} />
+                </div>
+                <a href={downloadHref(product, index)} className="button dark" rel="nofollow">
+                  <Download size={16} />
+                  Download free
+                </a>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {faqs.length > 0 && (
+        <section className="pl-faq">
+          <h2>Frequently Asked Questions</h2>
+          {faqs.map((item, i) => (
+            <details key={i}>
+              <summary>{item.q}</summary>
+              <p>{item.a}</p>
+            </details>
+          ))}
+        </section>
+      )}
+
+      <section className="pl-legal">
+        <h2>Legal &amp; Privacy</h2>
+        <div className="pl-legal-grid">
+          <div>
+            <Shield size={20} />
+            <h3>Privacy</h3>
+            <p>
+              We do not add third-party analytics or ad trackers. Read how information is handled
+              across Aur Labs tools and website.
+            </p>
+            <Link href="/privacy">Read our Privacy Policy →</Link>
+          </div>
+          <div>
+            <FileText size={20} />
+            <h3>License</h3>
+            <p>{product.license || "To be confirmed before release"}</p>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+/** Product landing template for desktop software tools. */
+export function DesktopSoftwareTemplate({
+  product,
+  content = defaultContent,
+}: {
+  product: Product;
+  content?: SiteContent;
+}) {
+  const { detected, platform, setPlatform } = useDetectedPlatform(product);
+  const { copiedKey, copy } = useClipboard();
+
+  return (
+    <ProductPageShell product={product} content={content}>
       <section className="pl-hero desktop-hero">
         <div className="pl-hero-content">
           <span className="eyebrow">
@@ -57,18 +490,7 @@ export function DesktopSoftwareTemplate({ product }: { product: Product }) {
           <p className="pl-tagline">{product.tagline}</p>
           <p className="pl-description">{product.description.split("\n\n")[0]}</p>
 
-          <div className="pl-cta">
-            <a href={product.releases[0]?.url || "#"} className="button orange">
-              <Download size={18} />
-              Download for {product.platforms[0] || "Desktop"}
-            </a>
-            {product.repository && (
-              <a href={product.repository} target="_blank" rel="noopener noreferrer" className="button light">
-                <GithubIcon size={18} />
-                Source
-              </a>
-            )}
-          </div>
+          <PrimaryCtaBlock product={product} detected={detected} platform={platform} />
 
           <div className="pl-platforms">
             {product.platforms.map((p) => (
@@ -77,36 +499,15 @@ export function DesktopSoftwareTemplate({ product }: { product: Product }) {
           </div>
         </div>
 
-        <div className={`pl-visual ${product.accent}`}>
-          <div className="product-visual">
-            <div className="desktop-mock">
-              <div className="mock-top">
-                <div className="traffic">
-                  <i />
-                  <i />
-                  <i />
-                </div>
-                <span>{product.name}</span>
-              </div>
-              <div className="mock-workspace">
-                <div className="mock-sidebar">
-                  <b>Files</b>
-                  <span>Document 1</span>
-                  <span>Document 2</span>
-                </div>
-                <div className="mock-doc">
-                  <span className="mock-eyebrow">WELCOME</span>
-                  <h4>{product.name}</h4>
-                  <p>{product.tagline}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ProductHeroVisual product={product} />
       </section>
 
       <section className="pl-features">
-        <h2>Why {product.name}?</h2>
+        <h2>
+          {product.status === "released"
+            ? `Why ${product.name}?`
+            : `What ${product.name} aims to offer`}
+        </h2>
         <div className="pl-features-grid">
           {product.features.map((feature, i) => (
             <div key={i} className="pl-feature-card">
@@ -117,79 +518,33 @@ export function DesktopSoftwareTemplate({ product }: { product: Product }) {
         </div>
       </section>
 
-      {product.screenshots.length > 0 && (
-        <section className="pl-screenshots">
-          <h2>Screenshots</h2>
-          <div className="pl-screenshot-grid">
-            {product.screenshots.map((src, i) => (
-              <img key={i} src={src} alt={`${product.name} screenshot ${i + 1}`} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {product.releases.length > 0 && (
-        <section className="pl-downloads">
-          <h2>Download {product.name}</h2>
-          <div className="pl-release-list">
-            {product.releases.map((release, i) => (
-              <div key={i} className="pl-release-card">
-                <div>
-                  <strong>{release.platform}</strong>
-                  <span>
-                    v{release.version} • {release.architecture}
-                  </span>
-                  {release.requirements && <small>{release.requirements}</small>}
-                </div>
-                <a href={release.url} className="button dark" download>
-                  <Download size={16} />
-                  Download
-                </a>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {product.faq && (
-        <section className="pl-faq">
-          <h2>Frequently Asked Questions</h2>
-          {product.faq.split("\n\n").map((qa, i) => {
-            const [question, ...answerParts] = qa.split("\n");
-            return (
-              <details key={i}>
-                <summary>{question}</summary>
-                <p>{answerParts.join(" ")}</p>
-              </details>
-            );
-          })}
-        </section>
-      )}
-
-      <section className="pl-legal">
-        <h2>Legal &amp; Privacy</h2>
-        <div className="pl-legal-grid">
-          <div>
-            <Shield size={20} />
-            <h3>Privacy</h3>
-            <p>{product.name} collects no personal data. All information stays on your device.</p>
-            <a href="/privacy">Read our Privacy Policy →</a>
-          </div>
-          <div>
-            <FileText size={20} />
-            <h3>License</h3>
-            <p>{product.license}</p>
-          </div>
-        </div>
-      </section>
+      <ProductOverviewAndDownloads
+        product={product}
+        platform={platform}
+        setPlatform={setPlatform}
+        copiedKey={copiedKey}
+        copy={copy}
+      />
     </ProductPageShell>
   );
 }
 
 /** Product landing template for mobile applications. */
-export function MobileAppTemplate({ product }: { product: Product }) {
+export function MobileAppTemplate({
+  product,
+  content = defaultContent,
+}: {
+  product: Product;
+  content?: SiteContent;
+}) {
+  const { detected, platform, setPlatform } = useDetectedPlatform(product);
+  const { copiedKey, copy } = useClipboard();
+  const androidIdx = latestReleaseIndex(product, "Android");
+  const iosIdx = latestReleaseIndex(product, "iOS");
+  const hasStoreReleases = product.status === "released" && (androidIdx >= 0 || iosIdx >= 0);
+
   return (
-    <ProductPageShell product={product}>
+    <ProductPageShell product={product} content={content}>
       <section className="pl-hero mobile-hero">
         <div className="pl-hero-content">
           <span className="eyebrow">
@@ -198,28 +553,9 @@ export function MobileAppTemplate({ product }: { product: Product }) {
           </span>
           <h1>{product.name}</h1>
           <p className="pl-tagline">{product.tagline}</p>
-
-          <div className="pl-rating">
-            <Star size={18} fill="currentColor" />
-            <Star size={18} fill="currentColor" />
-            <Star size={18} fill="currentColor" />
-            <Star size={18} fill="currentColor" />
-            <Star size={18} fill="currentColor" />
-            <span>4.8 • 10K+ downloads</span>
-          </div>
-
           <p className="pl-description">{product.description.split("\n\n")[0]}</p>
 
-          <div className="pl-cta">
-            <a href="#" className="button orange">
-              <Download size={18} />
-              Get it on Google Play
-            </a>
-            <a href="#" className="button dark">
-              <Download size={18} />
-              Download on App Store
-            </a>
-          </div>
+          <PrimaryCtaBlock product={product} detected={detected} platform={platform} />
 
           <div className="pl-platforms">
             {product.platforms.map((p) => (
@@ -228,27 +564,7 @@ export function MobileAppTemplate({ product }: { product: Product }) {
           </div>
         </div>
 
-        <div className={`pl-visual ${product.accent}`}>
-          <div className="phones">
-            <div className="phone phone-back">
-              <div className="phone-camera" />
-              <div className="phone-orb">✨</div>
-              <h4>{product.name}</h4>
-              <p>{product.tagline}</p>
-            </div>
-            <div className="phone phone-front">
-              <div className="phone-camera" />
-              <span className="phone-greeting">GOOD MORNING</span>
-              <h4>
-                Ready for <span>today?</span>
-              </h4>
-              <div className="phone-task">
-                <span>UPCOMING</span>
-                <b>Team standup</b>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ProductHeroVisual product={product} />
       </section>
 
       <section className="pl-features">
@@ -263,31 +579,54 @@ export function MobileAppTemplate({ product }: { product: Product }) {
         </div>
       </section>
 
-      <section className="pl-store-badges">
-        <h2>Get {product.name}</h2>
-        <div className="store-badge-row">
-          <a href="#" className="store-badge">
-            <Download size={24} />
-            <div>
-              <small>GET IT ON</small>
-              <strong>Google Play</strong>
-            </div>
-          </a>
-          <a href="#" className="store-badge">
-            <Download size={24} />
-            <div>
-              <small>DOWNLOAD ON</small>
-              <strong>App Store</strong>
-            </div>
-          </a>
-        </div>
-      </section>
+      {hasStoreReleases && (
+        <section className="pl-store-badges">
+          <h2>Get {product.name}</h2>
+          <div className="store-badge-row">
+            {androidIdx >= 0 && (
+              <a href={downloadHref(product, androidIdx)} rel="nofollow" className="store-badge">
+                <Download size={24} />
+                <div>
+                  <small>DOWNLOAD FOR</small>
+                  <strong>Android</strong>
+                </div>
+              </a>
+            )}
+            {iosIdx >= 0 && (
+              <a href={downloadHref(product, iosIdx)} rel="nofollow" className="store-badge">
+                <Download size={24} />
+                <div>
+                  <small>DOWNLOAD FOR</small>
+                  <strong>iOS</strong>
+                </div>
+              </a>
+            )}
+          </div>
+        </section>
+      )}
+
+      <ProductOverviewAndDownloads
+        product={product}
+        platform={platform}
+        setPlatform={setPlatform}
+        copiedKey={copiedKey}
+        copy={copy}
+      />
     </ProductPageShell>
   );
 }
 
 /** Product landing template for command-line tools. */
-export function CliToolTemplate({ product }: { product: Product }) {
+export function CliToolTemplate({
+  product,
+  content = defaultContent,
+}: {
+  product: Product;
+  content?: SiteContent;
+}) {
+  const { detected, platform, setPlatform } = useDetectedPlatform(product);
+  const { copiedKey, copy } = useClipboard();
+  const isReleased = product.status === "released";
   const quickstartSnippet = `# Install
 npm install -g ${product.slug}
 
@@ -298,7 +637,7 @@ ${product.slug} init
 ${product.slug} start`;
 
   return (
-    <ProductPageShell product={product}>
+    <ProductPageShell product={product} content={content}>
       <section className="pl-hero cli-hero">
         <div className="pl-hero-content">
           <span className="eyebrow">
@@ -310,63 +649,38 @@ ${product.slug} start`;
           </h1>
           <p className="pl-tagline">{product.tagline}</p>
 
-          <div className="cli-install">
-            <code>
-              <span className="prompt">$</span> npm install -g {product.slug}
-            </code>
-            <button
-              type="button"
-              className="copy-btn"
-              onClick={() => navigator.clipboard.writeText(`npm install -g ${product.slug}`)}
-            >
-              Copy
-            </button>
-          </div>
+          {isReleased && (
+            <div className="cli-install">
+              <code>
+                <span className="prompt">$</span> npm install -g {product.slug}
+              </code>
+              <button
+                type="button"
+                className="copy-btn"
+                onClick={() => copy(`npm install -g ${product.slug}`, "cli-install")}
+              >
+                {copiedKey === "cli-install" ? "Copied ✓" : "Copy"}
+              </button>
+            </div>
+          )}
 
           <p className="pl-description">{product.description.split("\n\n")[0]}</p>
 
-          <div className="pl-cta">
-            <a href={product.releases[0]?.url || "#"} className="button orange">
-              <Download size={18} />
-              Download Binary
-            </a>
-            {product.repository && (
-              <a href={product.repository} className="button light">
-                <GithubIcon size={18} />
-                GitHub
-              </a>
-            )}
+          <PrimaryCtaBlock
+            product={product}
+            detected={detected}
+            platform={platform}
+            labelPrefix="Download Binary for"
+          />
+
+          <div className="pl-platforms">
+            {product.platforms.map((p) => (
+              <span key={p}>{p}</span>
+            ))}
           </div>
         </div>
 
-        <div className={`pl-visual ${product.accent}`}>
-          <div className="terminal-mock">
-            <div className="mock-top">
-              <span>Terminal</span>
-            </div>
-            <div className="terminal-body">
-              <div className="terminal-brand">
-                <span>⚡</span> {product.name}
-              </div>
-              <p className="terminal-dim"># Install</p>
-              <p>
-                <span className="terminal-green">$</span> npm i -g {product.slug}
-              </p>
-              <p className="terminal-dim"># Initialize</p>
-              <p>
-                <span className="terminal-green">$</span> {product.slug} init
-              </p>
-              <p className="terminal-dim"># Run</p>
-              <p>
-                <span className="terminal-green">$</span> {product.slug} start
-              </p>
-              <div className="terminal-cursor">
-                <span className="terminal-green">$</span>
-                <i />
-              </div>
-            </div>
-          </div>
-        </div>
+        <ProductHeroVisual product={product} />
       </section>
 
       <section className="pl-features cli-features">
@@ -381,33 +695,49 @@ ${product.slug} start`;
         </div>
       </section>
 
-      <section className="pl-quickstart">
-        <h2>Quick Start</h2>
-        <div className="code-block">
-          <div className="code-header">
-            <span>bash</span>
-            <button type="button" onClick={() => navigator.clipboard.writeText(quickstartSnippet)}>
-              Copy
-            </button>
+      {isReleased && (
+        <section className="pl-quickstart">
+          <h2>Quick Start</h2>
+          <div className="code-block">
+            <div className="code-header">
+              <span>bash</span>
+              <button type="button" onClick={() => copy(quickstartSnippet, "cli-quickstart")}>
+                {copiedKey === "cli-quickstart" ? "Copied ✓" : "Copy"}
+              </button>
+            </div>
+            <pre>
+              <code>{quickstartSnippet}</code>
+            </pre>
           </div>
-          <pre>
-            <code>{quickstartSnippet}</code>
-          </pre>
-        </div>
-      </section>
+        </section>
+      )}
+
+      <ProductOverviewAndDownloads
+        product={product}
+        platform={platform}
+        setPlatform={setPlatform}
+        copiedKey={copiedKey}
+        copy={copy}
+      />
     </ProductPageShell>
   );
 }
 
 /** Selects the landing page template matching a product's category. */
-export function ProductTemplate({ product }: { product: Product }) {
+export function ProductTemplate({
+  product,
+  content = defaultContent,
+}: {
+  product: Product;
+  content?: SiteContent;
+}) {
   switch (product.category) {
     case "app":
-      return <MobileAppTemplate product={product} />;
+      return <MobileAppTemplate product={product} content={content} />;
     case "cli":
-      return <CliToolTemplate product={product} />;
+      return <CliToolTemplate product={product} content={content} />;
     case "software":
     default:
-      return <DesktopSoftwareTemplate product={product} />;
+      return <DesktopSoftwareTemplate product={product} content={content} />;
   }
 }
