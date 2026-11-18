@@ -26,7 +26,16 @@ function SeoCheck({e}:{e:any}){
   [pairs>=2,pairs>=2?`${pairs} questions with answers`:"Add at least 2 questions and answers (a blank line between each pair)"],
   [!!(e.screenshots&&e.screenshots.length),"A screenshot is set, so shared links show a picture"],
  ];
- return <ul className="seo-check" aria-label="Search checklist">{rows.map(([ok,msg],i)=><li key={i} className={ok?"ok":"warn"}><span aria-hidden="true">{ok?"✓":"!"}</span>{msg}</li>)}</ul>
+ return <>
+  <div className="serp-preview" aria-label="Google search snippet preview">
+   <span className="serp-label">Search result preview</span>
+   <div className="serp-url">https://aurlabs.online › {e.slug||"product-slug"}</div>
+   <div className="serp-title">{title||"Product Name — Tagline | Aur Labs"}</div>
+   <p className="serp-desc">{desc||"Add a description or search description to preview how this product appears in search results."}</p>
+   <div className="serp-meta">Free · {e.category==="app"?"Mobile App":e.category==="cli"?"CLI Tool":"Desktop Software"}{e.platforms?.length?` · ${e.platforms.join(", ")}`:""}</div>
+  </div>
+  <ul className="seo-check" aria-label="Search checklist">{rows.map(([ok,msg],i)=><li key={i} className={ok?"ok":"warn"}><span aria-hidden="true">{ok?"✓":"!"}</span>{msg}</li>)}</ul>
+ </>;
 }
 type AdminData={content:SiteContent;inbox:any[];assets:any[];events:any[];username:string};
 type Section="overview"|"products"|"journal"|"research"|"team"|"auri"|"inbox"|"media"|"seo"|"settings";

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { ArrowUpRight, Send } from "lucide-react";
 
 type Result =
@@ -36,6 +36,7 @@ export function AuriAsk() {
   const [error, setError] = useState("");
   const [starters, setStarters] = useState<string[]>([]);
   const box = useRef<HTMLDivElement>(null);
+  const inputId = useId();
 
   useEffect(() => {
     let live = true;
@@ -64,9 +65,9 @@ export function AuriAsk() {
   return (
     <section className="auri-ask" aria-label="Ask Auri a question">
       <form onSubmit={(e) => { e.preventDefault(); ask(q); }}>
-        <label htmlFor="auri-question">Ask about our tools</label>
+        <label htmlFor={inputId}>Ask about our tools</label>
         <div className="ask-row">
-          <input id="auri-question" value={q} maxLength={300} onChange={(e) => setQ(e.target.value)} placeholder="e.g. Does it work on Linux?" autoComplete="off" />
+          <input id={inputId} value={q} maxLength={300} onChange={(e) => setQ(e.target.value)} placeholder="e.g. Does it work on Linux?" autoComplete="off" />
           <button type="submit" disabled={busy || q.trim().length < 3} aria-label="Ask"><Send size={16} /></button>
         </div>
       </form>

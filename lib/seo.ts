@@ -1,4 +1,4 @@
-import type { Product } from "./content";
+import type { Product, Article } from "./content";
 
 export const SITE = "https://aurlabs.online";
 
@@ -172,6 +172,76 @@ export function generateBreadcrumbJsonLd(product: Product) {
         position: 3,
         name: product.name,
         item: `${SITE}/${product.slug}`,
+      },
+    ],
+  };
+}
+
+export function generateArticleJsonLd(article: Article, section: "journal" | "research") {
+  const url = `${SITE}/${section}/${article.slug}`;
+  const sectionName = section === "research" ? "Research" : "Journal";
+  const image = article.cover
+    ? article.cover.startsWith("/")
+      ? SITE + article.cover
+      : article.cover
+    : `${SITE}/assets/aur-sculpture.png`;
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "@id": `${url}#article`,
+        headline: article.title,
+        description: clip(article.summary, 155),
+        datePublished: article.date,
+        author: { "@type": "Person", name: article.author || "Aur Labs" },
+        publisher: {
+          "@type": "Organization",
+          name: "Aur Labs",
+          url: SITE,
+          logo: `${SITE}/assets/aur-sculpture.png`,
+        },
+        mainEntityOfPage: { "@type": "WebPage", "@id": url },
+        image,
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: SITE },
+          { "@type": "ListItem", position: 2, name: sectionName, item: `${SITE}/${section}` },
+          { "@type": "ListItem", position: 3, name: article.title, item: url },
+        ],
+      },
+    ],
+  };
+}
+
+export function generateCollectionJsonLd(
+  title: string,
+  path: string,
+  items: { name: string; url: string; description?: string }[]
+) {
+  const pageUrl = `${SITE}${path}`;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": `${pageUrl}#collection`,
+        name: title,
+        url: pageUrl,
+        isPartOf: { "@type": "WebSite", name: "Aur Labs", url: SITE },
+      },
+      {
+        "@type": "ItemList",
+        itemListElement: items.map((item, idx) => ({
+          "@type": "ListItem",
+          position: idx + 1,
+          name: item.name,
+          url: item.url,
+          ...(item.description ? { description: item.description } : {}),
+        })),
       },
     ],
   };

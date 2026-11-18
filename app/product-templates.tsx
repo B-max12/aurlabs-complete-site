@@ -29,10 +29,12 @@ import { parseFaq } from "@/lib/seo";
 import { ProductVisual } from "./visuals";
 import { MediaImage } from "./media-image";
 import { helpAuri } from "./auri-help";
+import { AuriAsk } from "./auri-ask";
 import {
   Header,
   Footer,
   DeferredAuri,
+  ProductCard,
   ReleaseHelp,
   downloadHref,
   fileExt,
@@ -336,12 +338,14 @@ function PrimaryCtaBlock({
 
 function ProductOverviewAndDownloads({
   product,
+  content,
   platform,
   setPlatform,
   copiedKey,
   copy,
 }: {
   product: Product;
+  content: SiteContent;
   platform: string;
   setPlatform: (p: string) => void;
   copiedKey: string;
@@ -356,6 +360,9 @@ function ProductOverviewAndDownloads({
     release,
     index: product.releases.indexOf(release),
   }));
+  const otherProducts = content.products
+    .filter((p) => p.published && p.slug !== product.slug)
+    .slice(0, 3);
 
   return (
     <>
@@ -444,6 +451,14 @@ function ProductOverviewAndDownloads({
         </section>
       )}
 
+      <section className="pl-auri-section" aria-label={`Questions about ${product.name}`}>
+        <div className="pl-auri-inner">
+          <h2>Questions about {product.name}?</h2>
+          <p>Ask Auri to search our team-written notes and product guides.</p>
+          <AuriAsk />
+        </div>
+      </section>
+
       <section className="pl-legal">
         <h2>Legal &amp; Privacy</h2>
         <div className="pl-legal-grid">
@@ -463,6 +478,28 @@ function ProductOverviewAndDownloads({
           </div>
         </div>
       </section>
+
+      {otherProducts.length > 0 && (
+        <section className="pl-more-products">
+          <div className="pl-more-header">
+            <div>
+              <span className="eyebrow">
+                <span className="orange-dot" />
+                From the Aur Labs catalogue
+              </span>
+              <h2>More tools from Aur Labs</h2>
+            </div>
+            <Link href="/products" className="text-link">
+              Explore all products →
+            </Link>
+          </div>
+          <div className="product-grid">
+            {otherProducts.map((p, i) => (
+              <ProductCard key={p.id} product={p} index={i} />
+            ))}
+          </div>
+        </section>
+      )}
     </>
   );
 }
@@ -520,6 +557,7 @@ export function DesktopSoftwareTemplate({
 
       <ProductOverviewAndDownloads
         product={product}
+        content={content}
         platform={platform}
         setPlatform={setPlatform}
         copiedKey={copiedKey}
@@ -607,6 +645,7 @@ export function MobileAppTemplate({
 
       <ProductOverviewAndDownloads
         product={product}
+        content={content}
         platform={platform}
         setPlatform={setPlatform}
         copiedKey={copiedKey}
@@ -714,6 +753,7 @@ ${product.slug} start`;
 
       <ProductOverviewAndDownloads
         product={product}
+        content={content}
         platform={platform}
         setPlatform={setPlatform}
         copiedKey={copiedKey}
