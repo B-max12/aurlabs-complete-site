@@ -31,6 +31,7 @@ import { ProductVisual } from "./visuals";
 import { MediaImage } from "./media-image";
 import { helpAuri } from "./auri-help";
 import { AuriAsk } from "./auri-ask";
+import { GitHubStarButton, resolveProductGitHubRepo } from "./github-star";
 import {
   Header,
   Footer,
@@ -287,6 +288,7 @@ function PrimaryCtaBlock({
   labelPrefix?: string;
 }) {
   const hasReleases = product.status === "released" && product.releases.length > 0;
+  const githubRepo = resolveProductGitHubRepo(product);
 
   if (!hasReleases) {
     const contactHref = `/contact?product=${encodeURIComponent(product.name)}&topic=${encodeURIComponent(
@@ -309,6 +311,7 @@ function PrimaryCtaBlock({
               Source
             </a>
           )}
+          {githubRepo && <GitHubStarButton repo={githubRepo} />}
         </div>
         <p className="pl-status-note">
           {product.status === "concept"
@@ -348,6 +351,7 @@ function PrimaryCtaBlock({
             Source
           </a>
         )}
+        {githubRepo && <GitHubStarButton repo={githubRepo} />}
       </div>
       {idx >= 0 ? (
         <p className="download-meta">

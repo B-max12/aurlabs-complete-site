@@ -5,7 +5,7 @@ const SB_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://zitgifdbkpvdrgpv
 const SB_KEY = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "sb_publishable_Fk0YvX-4fPS3Cqly8CqF5Q_hv6vyeeO";
 
 export type Visitor = { id: string; email: string; name: string; avatar: string; provider: string };
-type Stored = { access_token: string; refresh_token: string; expires_at: number; user: Visitor };
+type Stored = { access_token: string; refresh_token: string; expires_at: number; user: Visitor; provider_token?: string };
 
 export const STORAGE_KEY = "aur-visitor-v1";
 const RETURN_KEY = "aur-return-to";
@@ -32,6 +32,14 @@ export function parseVisitor(raw: string | null): Visitor | null {
   try { const s = JSON.parse(raw); return s?.user?.id ? (s.user as Visitor) : null; } catch { return null; }
 }
 export const getVisitor = (): Visitor | null => read()?.user ?? null;
+export const getProviderToken = (): string | null => read()?.provider_token ?? null;
+export function clearProviderToken() {
+  const s = read();
+  if (s && s.provider_token) {
+    delete s.provider_token;
+    write(s);
+  }
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const toVisitor = (u: any): Visitor => ({
@@ -62,7 +70,14 @@ export async function completeSignIn(): Promise<{ kind: "ok" | "error"; text: st
   try {
     const user = await fetchUser(token);
     const expiresIn = Number(hash.get("expires_in")) || 3600;
-    write({ access_token: token, refresh_token: hash.get("refresh_token") || "", expires_at: Date.now() + expiresIn * 1000, user });
+    const providerToken = hash.get("provider_token") || undefined;
+    write({
+      access_token: token,
+      refresh_token: hash.get("refresh_token") || "",
+      expires_at: Date.now() + expiresIn * 1000,
+      user,
+      ...(providerToken ? { provider_token: providerToken } : {}),
+    });
     let back = "";
     try { back = sessionStorage.getItem(RETURN_KEY) || ""; sessionStorage.removeItem(RETURN_KEY); } catch { /* ignore */ }
     history.replaceState(null, "", location.pathname + location.search);
@@ -84,7 +99,14 @@ export async function getAccessToken(): Promise<string | null> {
     const r = await fetch(SB_URL + "/auth/v1/token?grant_type=refresh_token", { method: "POST", headers: { apikey: SB_KEY, "Content-Type": "application/json" }, body: JSON.stringify({ refresh_token: s.refresh_token }) });
     if (!r.ok) { write(null); return null; }
     const d = await r.json();
-    write({ access_token: d.access_token, refresh_token: d.refresh_token || s.refresh_token, expires_at: Date.now() + (Number(d.expires_in) || 3600) * 1000, user: d.user ? toVisitor(d.user) : s.user });
+    const providerToken = d.provider_token || s.provider_token;
+    write({
+      access_token: d.access_token,
+      refresh_token: d.refresh_token || s.refresh_token,
+      expires_at: Date.now() + (Number(d.expires_in) || 3600) * 1000,
+      user: d.user ? toVisitor(d.user) : s.user,
+      ...(providerToken ? { provider_token: providerToken } : {}),
+    });
     return d.access_token as string;
   } catch { return s.access_token; }
 }
@@ -99,9 +121,17 @@ const rememberReturn = () => { try { sessionStorage.setItem(RETURN_KEY, location
 const redirectTarget = () => encodeURIComponent(location.origin + "/");
 
 export type Provider = "google" | "github" | "azure";
-export function startOAuth(provider: Provider) {
+export function startOAuth(provider: Provider, scopes?: string) {
   rememberReturn();
-  location.href = SB_URL + "/auth/v1/authorize?provider=" + provider + (provider === "azure" ? "&scopes=email" : "") + "&redirect_to=" + redirectTarget();
+  const scopeParam =
+    provider === "azure"
+      ? "&scopes=email"
+      : provider === "github"
+        ? "&scopes=" + encodeURIComponent(scopes || "public_repo")
+        : scopes
+          ? "&scopes=" + encodeURIComponent(scopes)
+          : "";
+  location.href = SB_URL + "/auth/v1/authorize?provider=" + provider + scopeParam + "&redirect_to=" + redirectTarget();
 }
 
 export async function sendEmailLink(email: string) {
