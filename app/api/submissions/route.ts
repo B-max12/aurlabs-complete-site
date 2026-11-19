@@ -16,8 +16,9 @@ export async function POST(req:Request){
     const ip=(req.headers.get("x-forwarded-for")||"").split(",")[0].trim()||req.headers.get("x-real-ip")||"anonymous";
     if(!(await rateLimit("submit:"+ip,8,3600000))||!(await rateLimit("email:"+data.email.toLowerCase(),5,3600000)))return json({error:"You’ve sent several messages recently. Please try again in an hour or email us."},429);
     const {website:_,idempotencyKey,...details}=data;
-    await database().prepare("INSERT OR IGNORE INTO submissions (id,kind,name,email,data,status,created_at) VALUES (?,?,?,?,?,'new',?)").bind(idempotencyKey,data.kind,data.name,data.email.toLowerCase(),JSON.stringify(details),Date.now()).run();
-    after(()=>notifySubmission(data.kind,data.name,data.email.toLowerCase(),details as Record<string,unknown>,idempotencyKey.slice(0,8)));
+    const senderName=data.kind==="notify"?`Release alert (${data.product})`:data.name;
+    await database().prepare("INSERT OR IGNORE INTO submissions (id,kind,name,email,data,status,created_at) VALUES (?,?,?,?,?,'new',?)").bind(idempotencyKey,data.kind,senderName,data.email.toLowerCase(),JSON.stringify(details),Date.now()).run();
+    after(()=>notifySubmission(data.kind,senderName,data.email.toLowerCase(),details as Record<string,unknown>,idempotencyKey.slice(0,8)));
     return json({ok:true,reference:idempotencyKey.slice(0,8)},201);
   }catch(error){console.error("Submission failed",error instanceof Error?error.message:"unknown");return json({error:"Your message wasn’t saved. Please try again or email the team directly."},503);}
 }

@@ -1162,3 +1162,283 @@ html[data-theme="light"] .public-site .gh-star-connect {
   color: var(--ink);
   background: var(--st-wash);
 }
+
+/* Command Palette (Ctrl+K / Cmd+K) */
+.public-site .cmd-trigger-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--st-wash);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.public-site .cmd-trigger-btn:hover {
+  border-color: var(--st-line2);
+  color: var(--ink);
+  background: var(--st-fill);
+}
+.public-site .cmd-trigger-kbd {
+  padding: 2px 6px;
+  border-radius: 5px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  font-family: inherit;
+  font-size: 11px;
+  color: var(--muted);
+}
+@media (max-width: 820px) {
+  .public-site .cmd-trigger-label,
+  .public-site .cmd-trigger-kbd {
+    display: none;
+  }
+  .public-site .cmd-trigger-btn {
+    width: 40px;
+    padding: 0;
+    justify-content: center;
+  }
+}
+.cmd-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 220;
+  display: grid;
+  place-items: start center;
+  padding: 10vh 16px 24px;
+  background: rgba(12, 9, 3, 0.72);
+  backdrop-filter: blur(6px);
+}
+.cmd-dialog {
+  width: min(580px, 100%);
+  max-height: 76vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 18px;
+  border: 1px solid var(--st-line2, #8d6613);
+  background: var(--white, #211908);
+  color: var(--ink, #ede8e4);
+  box-shadow: 0 28px 70px -16px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+  font-family: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+.cmd-input-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line, #3d2e10);
+  color: var(--muted, #c2b6a6);
+}
+.cmd-input-row input {
+  flex: 1;
+  border: 0;
+  outline: none !important;
+  background: transparent;
+  color: var(--ink, #ede8e4);
+  font-size: 15px;
+}
+.cmd-clear-btn,
+.cmd-esc-btn {
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--line, #3d2e10);
+  background: var(--st-wash, #261d0a);
+  font-size: 11px;
+  color: var(--muted, #c2b6a6);
+}
+.cmd-results {
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cmd-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.cmd-group-label {
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted, #c2b6a6);
+}
+.cmd-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  text-align: left;
+  color: var(--ink, #ede8e4);
+}
+.cmd-item.active,
+.cmd-item:hover {
+  background: var(--st-wash, #261d0a);
+}
+.cmd-item-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--line, #3d2e10);
+  background: var(--paper, #191306);
+  display: grid;
+  place-items: center;
+  color: var(--orange, #8d6613);
+  flex-shrink: 0;
+}
+.cmd-item-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cmd-item-text b {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink, #ede8e4);
+}
+.cmd-item-text small {
+  font-size: 12px;
+  color: var(--muted, #c2b6a6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cmd-item-badge {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--st-fill, #3d2e10);
+  color: var(--ink, #ede8e4);
+  white-space: nowrap;
+}
+.cmd-item-arrow {
+  color: var(--muted, #c2b6a6);
+  flex-shrink: 0;
+}
+.cmd-empty {
+  padding: 28px 16px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--muted, #c2b6a6);
+}
+.cmd-footer {
+  display: flex;
+  gap: 16px;
+  padding: 10px 18px;
+  border-top: 1px solid var(--line, #3d2e10);
+  background: var(--paper, #191306);
+  font-size: 11.5px;
+  color: var(--muted, #c2b6a6);
+}
+
+/* Release Notify Waitlist Box */
+.public-site .release-notify-box {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--st-wash);
+  max-width: 480px;
+}
+.public-site .release-notify-box.done {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border-color: rgba(16, 185, 129, 0.45);
+  background: rgba(16, 185, 129, 0.14);
+  color: var(--ink);
+  font-size: 13px;
+}
+.public-site .release-notify-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.public-site .release-notify-label strong {
+  color: var(--ink);
+}
+.public-site .release-notify-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.public-site .release-notify-row input {
+  flex: 1 1 200px;
+  min-height: 38px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  color: var(--ink);
+  font-size: 13px;
+}
+.public-site .release-notify-error {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #fb7185;
+}
+
+/* Rich Prose formatting */
+.public-site .prose h3 {
+  font-size: 22px;
+  margin: 22px 0 12px;
+  color: var(--ink);
+}
+.public-site .prose ul,
+.public-site .prose ol {
+  margin: 16px 0;
+  padding-left: 22px;
+  color: var(--muted);
+}
+.public-site .prose li {
+  margin: 8px 0;
+  line-height: 1.75;
+}
+.public-site .prose blockquote {
+  margin: 20px 0;
+  padding: 14px 18px;
+  border-left: 3px solid var(--orange);
+  background: var(--st-wash);
+  border-radius: 0 10px 10px 0;
+  color: var(--ink);
+  font-style: italic;
+}
+.public-site .prose code {
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: var(--st-wash);
+  border: 1px solid var(--line);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  color: var(--ink);
+}
+.public-site .prose pre.prose-code-block {
+  margin: 20px 0;
+  padding: 16px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--st-line2);
+  background: var(--paper);
+  overflow-x: auto;
+}
+.public-site .prose pre.prose-code-block code {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: 13.5px;
+  line-height: 1.65;
+}

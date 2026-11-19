@@ -120,6 +120,8 @@ const submissions = await import("../app/api/submissions/route.ts");
 const ghStars = await import("../app/api/github/stars/route.ts");
 const feed = await import("../app/feed.xml/route.ts");
 const jsonFeed = await import("../app/feed.json/route.ts");
+const health = await import("../app/api/health/route.ts");
+const manifestMod = await import("../app/manifest.ts");
 const { isSafeDownloadTarget } = await import("../app/api/download/route.ts");
 const { cleanDisplayText, defaultContent } = await import("../lib/content.ts");
 const { videoURL, productSchema, settingsSchema, safeURL } = await import("../lib/validation.ts");
@@ -327,6 +329,32 @@ ok(!isSafeDownloadTarget("http://github.com/B-max12/dear_diary/app.exe"), "HTTP 
 ok(!isSafeDownloadTarget("https://localhost/secret"), "Localhost download target rejected");
 ok(!isSafeDownloadTarget("https://127.0.0.1/secret"), "Loopback IP download target rejected");
 ok(!isSafeDownloadTarget("https://user:pass@example.com/file.zip"), "Credentialed download target rejected");
+
+// 7. Release notification submission, /api/health, and PWA manifest
+const notifyRes = await submissions.POST(
+  req(
+    {
+      kind: "notify",
+      email: "waitlist@example.invalid",
+      product: "Aur Notes",
+      platform: "Linux",
+      website: "",
+      idempotencyKey: crypto.randomUUID(),
+      elapsedMs: 2500,
+    },
+    { path: "/api/submissions" }
+  )
+);
+eq(notifyRes.status, 201, "Release waitlist subscription saved");
+
+const healthRes = await health.GET();
+eq(healthRes.status, 200, "/api/health responds 200");
+const healthData = await healthRes.json();
+eq(healthData.ok, true, "/api/health reports ok");
+ok(typeof healthData.counts?.products === "number", "/api/health reports product counts");
+
+const manifestData = manifestMod.default();
+eq(manifestData.theme_color, "#8D6613", "Manifest uses Bronze theme color");
 
 console.log(`PASS: ${checks} security & feature assertions passed.`);
 sqlite.close();

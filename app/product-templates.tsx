@@ -34,6 +34,8 @@ import { helpAuri } from "./auri-help";
 import { AuriAsk } from "./auri-ask";
 import { GitHubStarButton, resolveProductGitHubRepo } from "./github-star";
 import { VideoSection } from "./video-player";
+import { ReleaseNotify } from "./release-notify";
+import { RichProse } from "./rich-prose";
 import {
   Header,
   Footer,
@@ -321,6 +323,7 @@ function PrimaryCtaBlock({
             ? `${product.name} is an illustrative concept preview. No download is available yet.`
             : `${product.name} is currently in development. Check back soon or reach out to help test.`}
         </p>
+        <ReleaseNotify productName={product.name} platform={detected || platform} />
       </div>
     );
   }
@@ -418,9 +421,7 @@ function ProductOverviewAndDownloads({
         <section className="pl-about">
           <div className="pl-about-inner prose">
             <h2>About {product.name}</h2>
-            {paragraphs.map((p, i) => (
-              <p key={i}>{cleanDisplayText(p)}</p>
-            ))}
+            <RichProse body={product.description} />
           </div>
         </section>
       )}

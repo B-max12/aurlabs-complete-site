@@ -1618,6 +1618,7 @@ export default function Admin({ initial }: { initial: SiteContent }) {
                     ["all", "All messages"],
                     ["join", "Applications"],
                     ["contact", "Contact"],
+                    ["notify", "Release alerts"],
                   ].map(([k, l]) => (
                     <button className={inboxKind === k ? "active" : ""} key={k} onClick={() => setInboxKind(k)}>
                       {l}
@@ -1647,7 +1648,7 @@ export default function Admin({ initial }: { initial: SiteContent }) {
                         <span>
                           <b>
                             {item.name}
-                            <small>{item.kind === "join" ? "Application" : "Message"}</small>
+                            <small>{item.kind === "join" ? "Application" : item.kind === "notify" ? "Release alert" : "Message"}</small>
                           </b>
                           <span>{item.email}</span>
                           <em>
