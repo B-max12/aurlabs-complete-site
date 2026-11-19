@@ -38,14 +38,25 @@ export async function passwordHash(password:string,salt:string){
   return Array.from(new Uint8Array(bits)).map(x=>x.toString(16).padStart(2,"0")).join("");
 }
 export type Admin={id:string;user_id:string;username:string;password_hash:string;salt:string};
+export type AdminSession={role:"owner"|"team";userId:string;username:string;email?:string};
 export const getAdmin=()=>database().prepare("SELECT * FROM administrators WHERE id = 'owner'").first<Admin>();
 export function clientIp(req:Request){return (req.headers.get("x-forwarded-for")||"").split(",")[0].trim()||req.headers.get("x-real-ip")||"unknown"}
-// Access to the admin area requires a valid unlock token, which is only issued after the admin username and password are verified.
-export async function authorized(req:Request){
-  const admin=await getAdmin();if(!admin)return false;
-  const token=req.headers.get("x-aur-unlock");if(!token||token.length>200)return false;
+// Access to the admin area requires a valid unlock token, issued either for the owner password or an invited team member token.
+export async function authSession(req:Request):Promise<AdminSession|null>{
+  const admin=await getAdmin();if(!admin)return null;
+  const token=req.headers.get("x-aur-unlock");if(!token||token.length>200)return null;
   const row=await database().prepare("SELECT user_id, expires_at FROM admin_unlocks WHERE token_hash = ?").bind(await sha(token)).first<{user_id:string;expires_at:number}>();
-  return !!row&&row.user_id===admin.user_id&&row.expires_at>Date.now();
+  if(!row||row.expires_at<=Date.now())return null;
+  if(row.user_id===admin.user_id)return {role:"owner",userId:admin.user_id,username:admin.username};
+  if(row.user_id.startsWith("team:")){
+    const member=await database().prepare("SELECT id, user_id, username, salt FROM administrators WHERE user_id = ?").bind(row.user_id).first<{id:string;user_id:string;username:string;salt:string}>();
+    if(!member)return null;
+    return {role:"team",userId:member.user_id,username:member.username,email:member.salt};
+  }
+  return null;
+}
+export async function authorized(req:Request){
+  return !!(await authSession(req));
 }
 export async function rateLimit(key:string,limit:number,windowMs:number){
   const now=Date.now(),bucket=Math.floor(now/windowMs),id=await sha(key+":"+bucket);

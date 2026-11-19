@@ -983,3 +983,182 @@ html[data-theme="light"] .public-site .gh-star-connect {
 .public-site .gh-star-ext:hover {
   background: var(--st-fill);
 }
+
+/* Embedded video showcase across products, journal, research & home/about */
+.public-site .aur-video-section {
+  margin: 48px 0;
+  padding: 28px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  box-shadow: var(--st-shadow);
+}
+.public-site.product-landing .aur-video-section {
+  width: min(1280px, calc(100% - 96px));
+  margin: 48px auto;
+}
+@media (max-width: 700px) {
+  .public-site.product-landing .aur-video-section {
+    width: calc(100% - 36px);
+    padding: 18px;
+  }
+}
+.public-site .aur-video-head {
+  margin-bottom: 20px;
+}
+.public-site .aur-video-head .eyebrow {
+  margin-bottom: 8px;
+  color: var(--muted);
+}
+.public-site .aur-video-head h2 {
+  font-size: clamp(24px, 2.8vw, 32px);
+  color: var(--ink);
+  margin: 0;
+}
+.public-site .aur-video-head p {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+.public-site .aur-video-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #0b0b0e;
+}
+.public-site .aur-video-frame iframe,
+.public-site .aur-video-frame video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+}
+.public-site .aur-video-fallback {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--st-wash);
+  color: var(--ink);
+}
+.public-site .aur-video-fallback > div {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.public-site .aur-video-fallback b {
+  display: block;
+  font-size: 14px;
+}
+.public-site .aur-video-fallback span {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.public-site .aur-video-fallback:hover {
+  background: var(--st-fill);
+  border-color: #6e707a;
+}
+
+/* Social accounts pills in Footer & Contact */
+.public-site .footer-social,
+.public-site .contact-socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.public-site .footer-social > a,
+.public-site .contact-socials > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.public-site .footer-social > a:hover,
+.public-site .contact-socials > a:hover {
+  background: var(--st-fill);
+  border-color: #6e707a;
+}
+
+/* Enhanced welcome / returning-account detection popup */
+.visitor-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  margin-bottom: 10px;
+  border-radius: 999px;
+  background: var(--st-wash);
+  border: 1px solid var(--st-line2);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.visitor-mode-tabs {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--st-wash);
+}
+.visitor-mode-tabs > button {
+  padding: 6px 14px;
+  border-radius: 7px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--muted);
+}
+.visitor-mode-tabs > button.active {
+  background: var(--white);
+  color: var(--ink);
+  box-shadow: var(--st-shadow-sm);
+}
+.visitor-provider.remembered {
+  border-color: #6e707a;
+  background: var(--st-wash);
+}
+.visitor-used-badge {
+  margin-left: auto;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--st-fill);
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.visitor-dialog-foot {
+  margin-top: 14px;
+  text-align: center;
+}
+.visitor-guest-btn {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+.visitor-guest-btn:hover {
+  color: var(--ink);
+  background: var(--st-wash);
+}

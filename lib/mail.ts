@@ -40,3 +40,33 @@ export async function notifySubmission(kind: string, name: string, email: string
 <p style="margin:16px 0 0;font-size:13px;color:#737373">Reference ${esc(reference)} · Reply to this email to answer them directly.</p></div>`;
   await sendMail({ to, subject: `New ${what} from ${clean(name, 60)}`, text, html, replyTo: email });
 }
+
+export async function sendTeamAdminInvite(opts: { to: string; name: string; token: string; adminUrl: string }): Promise<boolean> {
+  const safeName = clean(opts.name, 80);
+  const text = [
+    `Hello ${safeName},`,
+    "",
+    "You have been granted Team Admin access to the Aur Labs studio.",
+    "",
+    `Admin page: ${opts.adminUrl}`,
+    `Your email: ${opts.to}`,
+    `Your access token: ${opts.token}`,
+    "",
+    "Open the admin page, choose Team Member Token, enter your email and paste this access token.",
+    "Team Admin accounts can edit and publish content, upload media, and review submissions, but cannot invite or remove other admins.",
+  ].join("\n");
+  const html = `<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#121216;max-width:560px">
+<p style="margin:0 0 8px;font-size:13px;color:#4a4b52">Aur Labs Studio Invitation</p>
+<h2 style="margin:0 0 12px;font-size:20px">Hello ${esc(safeName)},</h2>
+<p style="margin:0 0 14px">You have been invited as a <strong>Team Admin</strong> for Aur Labs. Open the studio sign in page, switch to <strong>Team Member Token</strong>, and enter your email with the token below.</p>
+<div style="padding:14px 16px;background:#f4f4f6;border:1px solid #d5d6dc;border-radius:10px;margin:0 0 16px">
+  <div style="font-size:12px;color:#4a4b52;margin-bottom:4px">Email</div>
+  <div style="font-weight:600;margin-bottom:10px">${esc(opts.to)}</div>
+  <div style="font-size:12px;color:#4a4b52;margin-bottom:4px">Personal Access Token</div>
+  <code style="display:block;word-break:break-all;font-size:13px;color:#121216">${esc(opts.token)}</code>
+</div>
+<p style="margin:0 0 16px"><a href="${esc(opts.adminUrl)}" style="display:inline-block;padding:10px 16px;background:#121216;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:600">Open Aur Labs Studio</a></p>
+<p style="margin:0;font-size:12px;color:#4a4b52">Keep this token private. Only the main owner can invite or revoke team access.</p>
+</div>`;
+  return sendMail({ to: opts.to, subject: "Your Aur Labs Team Admin access token", text, html });
+}

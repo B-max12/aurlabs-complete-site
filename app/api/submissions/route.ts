@@ -5,7 +5,9 @@ import {after} from "next/server";
 export async function POST(req:Request){
   if(!sameOrigin(req))return json({error:"Please submit this form from our website."},403);
   try{
-    const input=await parseBody(req,20000);const result=submissionSchema.safeParse(input);
+    const input=await parseBody(req,20000);
+    if(typeof (input as {elapsedMs?:unknown})?.elapsedMs==="number"&&(input as {elapsedMs:number}).elapsedMs<1200)return json({error:"Please take a moment to review your message before sending."},400);
+    const result=submissionSchema.safeParse(input);
     if(!result.success)return json({error:result.error.issues[0].message,fields:result.error.flatten().fieldErrors},400);
     const data=result.data;
     if(data.kind==="join"&&!(await readContent()).settings.hiring)return json({error:"Volunteer applications are currently closed. Please contact the team instead."},403);

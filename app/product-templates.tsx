@@ -22,6 +22,7 @@ import {
   defaultContent,
   statusLabel,
   categoryLabel,
+  cleanDisplayText,
   type Product,
   type Release,
   type SiteContent,
@@ -32,6 +33,7 @@ import { MediaImage } from "./media-image";
 import { helpAuri } from "./auri-help";
 import { AuriAsk } from "./auri-ask";
 import { GitHubStarButton, resolveProductGitHubRepo } from "./github-star";
+import { VideoSection } from "./video-player";
 import {
   Header,
   Footer,
@@ -165,6 +167,7 @@ function ProductPageShell({
           <div className="pl-breadcrumb-actions">
             <div className="pl-jump-links" aria-label="Jump to section">
               <a href="#features">Features</a>
+              {product.video && <a href="#video">Video</a>}
               {product.releases.length > 0 && <a href="#downloads">Downloads</a>}
               {faqsCount > 0 && <a href="#faq">FAQ</a>}
               <a href="#ask-auri">Ask Auri</a>
@@ -403,12 +406,20 @@ function ProductOverviewAndDownloads({
 
   return (
     <>
+      {product.video && (
+        <VideoSection
+          url={product.video}
+          title={`${product.name} launch video`}
+          caption={`See ${product.name} in action`}
+        />
+      )}
+
       {paragraphs.length > 1 && (
         <section className="pl-about">
           <div className="pl-about-inner prose">
             <h2>About {product.name}</h2>
             {paragraphs.map((p, i) => (
-              <p key={i}>{p}</p>
+              <p key={i}>{cleanDisplayText(p)}</p>
             ))}
           </div>
         </section>
@@ -566,8 +577,8 @@ export function DesktopSoftwareTemplate({
             Desktop Software
           </span>
           <h1>{product.name}</h1>
-          <p className="pl-tagline">{product.tagline}</p>
-          <p className="pl-description">{product.description.split("\n\n")[0]}</p>
+          <p className="pl-tagline">{cleanDisplayText(product.tagline)}</p>
+          <p className="pl-description">{cleanDisplayText(product.description.split("\n\n")[0])}</p>
 
           <PrimaryCtaBlock product={product} detected={detected} platform={platform} />
 
@@ -595,7 +606,7 @@ export function DesktopSoftwareTemplate({
               <span className="pl-feature-icon" aria-hidden="true">
                 <Check size={18} />
               </span>
-              <p>{feature}</p>
+              <p>{cleanDisplayText(feature)}</p>
             </div>
           ))}
         </div>
@@ -636,8 +647,8 @@ export function MobileAppTemplate({
             Mobile App
           </span>
           <h1>{product.name}</h1>
-          <p className="pl-tagline">{product.tagline}</p>
-          <p className="pl-description">{product.description.split("\n\n")[0]}</p>
+          <p className="pl-tagline">{cleanDisplayText(product.tagline)}</p>
+          <p className="pl-description">{cleanDisplayText(product.description.split("\n\n")[0])}</p>
 
           <PrimaryCtaBlock product={product} detected={detected} platform={platform} />
 
@@ -661,7 +672,7 @@ export function MobileAppTemplate({
               <span className="pl-feature-icon" aria-hidden="true">
                 <Check size={18} />
               </span>
-              <p>{feature}</p>
+              <p>{cleanDisplayText(feature)}</p>
             </div>
           ))}
         </div>
@@ -736,7 +747,7 @@ ${product.slug} start`;
           <h1>
             <code>{product.name.toLowerCase()}</code>
           </h1>
-          <p className="pl-tagline">{product.tagline}</p>
+          <p className="pl-tagline">{cleanDisplayText(product.tagline)}</p>
 
           <div className="cli-install">
             <code>
@@ -752,11 +763,11 @@ ${product.slug} start`;
           </div>
           {!isReleased && (
             <p className="pl-cli-preview-note">
-              Illustrative CLI preview — commands will work once {product.name} is released.
+              Illustrative CLI preview: commands will work once {product.name} is released.
             </p>
           )}
 
-          <p className="pl-description">{product.description.split("\n\n")[0]}</p>
+          <p className="pl-description">{cleanDisplayText(product.description.split("\n\n")[0])}</p>
 
           <PrimaryCtaBlock
             product={product}
@@ -778,14 +789,14 @@ ${product.slug} start`;
       </section>
 
       <section className="pl-features cli-features" id="features">
-        <h2>Developer-friendly</h2>
+        <h2>Developer friendly</h2>
         <div className="pl-features-grid">
           {product.features.map((feature, i) => (
             <div key={i} className="pl-feature-card">
               <span className="pl-feature-icon" aria-hidden="true">
                 <Terminal size={18} />
               </span>
-              <p>{feature}</p>
+              <p>{cleanDisplayText(feature)}</p>
             </div>
           ))}
         </div>

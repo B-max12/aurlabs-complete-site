@@ -1,7 +1,7 @@
 import {sql} from "@/lib/db";
 export const runtime="nodejs";
 export async function GET(req:Request,{params}:{params:Promise<{key:string}>}){
-  const {key}=await params;if(!/^[a-f0-9-]+\.(png|jpg|webp|gif)$/.test(key))return new Response("Not found",{status:404});
+  const {key}=await params;if(!/^[a-f0-9-]+\.(png|jpg|webp|gif|mp4|webm)$/.test(key))return new Response("Not found",{status:404});
   try{
     const rows=await sql()`SELECT m.mime AS mime, b.data AS data FROM media m JOIN media_blobs b ON b.id=m.id WHERE m.id=${key}`;
     if(!rows.length)return new Response("Not found",{status:404});

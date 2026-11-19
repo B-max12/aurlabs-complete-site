@@ -1,9 +1,9 @@
 export const PLATFORMS = ["Windows", "macOS", "Linux", "FreeBSD", "Android", "iOS", "Web", "Other"] as const;
 export type Release = { platform: string; version: string; url: string; architecture: string; requirements: string; checksum: string; notes: string; date: string };
-export type Product = { id: string; slug: string; name: string; tagline: string; description: string; category: "software" | "app" | "cli"; platforms: string[]; status: "concept" | "development" | "released"; featured: boolean; accent: "peach" | "lavender" | "mint"; visual: "notes" | "mobile" | "terminal"; features: string[]; screenshots: string[]; repository: string; license: string; releases: Release[]; seoTitle?: string; seoDescription?: string; keyword?: string; faq?: string; published: boolean };
-export type Article = { id: string; slug: string; title: string; summary: string; body: string; tag: string; author: string; date: string; cover: string; references?: {label:string;url:string}[]; published: boolean };
+export type Product = { id: string; slug: string; name: string; tagline: string; description: string; category: "software" | "app" | "cli"; platforms: string[]; status: "concept" | "development" | "released"; featured: boolean; accent: "peach" | "lavender" | "mint"; visual: "notes" | "mobile" | "terminal"; features: string[]; screenshots: string[]; video?: string; repository: string; license: string; releases: Release[]; seoTitle?: string; seoDescription?: string; keyword?: string; faq?: string; published: boolean };
+export type Article = { id: string; slug: string; title: string; summary: string; body: string; tag: string; author: string; date: string; cover: string; video?: string; references?: {label:string;url:string}[]; published: boolean };
 export type TeamMember = { id: string; name: string; role: string; bio: string; initials: string; image: string; url: string; published: boolean };
-export type Settings = { name: string; email: string; tagline: string; heroLine1: string; heroLine2: string; heroDescription: string; mission: string; about: string; donationIntro: string; donationUrl: string; donationMonthlyUrl: string; donationProvider: string; donationTransparency: string; githubUrl: string; footerNote: string; hiring: boolean; auriGuides: Record<string,string> };
+export type Settings = { name: string; email: string; tagline: string; heroLine1: string; heroLine2: string; heroDescription: string; mission: string; about: string; introVideo?: string; donationIntro: string; donationUrl: string; donationMonthlyUrl: string; donationProvider: string; donationTransparency: string; githubUrl: string; youtubeUrl?: string; xUrl?: string; linkedinUrl?: string; instagramUrl?: string; discordUrl?: string; footerNote: string; hiring: boolean; auriGuides: Record<string,string> };
 export type SiteContent = { settings: Settings; products: Product[]; journal: Article[]; research: Article[]; team: TeamMember[] };
 export type ContentKind = "products" | "journal" | "research" | "team" | "settings";
 
@@ -17,7 +17,7 @@ export const defaultContent: SiteContent = {
     donationIntro: "Free for the people who use it. Powered by the people who believe in it. Your support can help cover hosting, development tools, accessibility testing, and the time it takes to build something useful.",
     donationUrl: "", donationMonthlyUrl: "", donationProvider: "Support Aur Labs",
     donationTransparency: "We are setting up our donation channels. Until then, contact us to discuss a contribution. We’ll confirm the payment method and purpose with you before you send anything. No funds are collected on this website. We do not currently claim that contributions are tax-deductible.",
-    githubUrl: "", footerNote: "Built with care. Made for everyone.", hiring: true, auriGuides: {},
+    introVideo: "", githubUrl: "", youtubeUrl: "", xUrl: "", linkedinUrl: "", instagramUrl: "", discordUrl: "", footerNote: "Built with care. Made for everyone.", hiring: true, auriGuides: {},
   },
   products: [
     {id:"aur-notes",slug:"aur-notes",name:"Aur Notes",tagline:"A little room for your next big idea.",description:"A concept for a calm desktop workspace that makes everyday notes feel simple. This illustrative product gives you a preview of the kind of thoughtful, approachable tools we want to build.\n\nThis is a design concept, not a released application. Features and target platforms describe the proposed direction and are not confirmed capabilities.",category:"software",platforms:["Windows","macOS","Linux"],status:"concept",featured:true,accent:"lavender",visual:"notes",features:["A calm, focused writing space","Simple notebooks and quick search","A free tool for everyday ideas"],screenshots:[],repository:"",license:"To be confirmed before release",releases:[],published:true},
@@ -39,3 +39,14 @@ export const defaultContent: SiteContent = {
 
 export const categoryLabel = (c: string) => c === "software" ? "Desktop software" : c === "app" ? "Mobile app" : "Command line";
 export const statusLabel = (s: string) => s === "released" ? "Available now" : s === "development" ? "In development" : "Concept preview";
+export function cleanDisplayText(s?: string): string {
+  if (!s) return "";
+  return s
+    .replace(/\*{1,3}([^*\n]+)\*{1,3}/g, "$1")
+    .replace(/_{1,3}([^_\n]+)_{1,3}/g, "$1")
+    .replace(/^\s*[-*_]{3,}\s*$/gm, "")
+    .replace(/^\s*[-*_]\s+/gm, "")
+    .replace(/\s+[-—–_]+\s+/g, " ")
+    .replace(/[*_]+/g, "")
+    .replace(/(^|\s)-+(\s|$)/g, "$1$2");
+}

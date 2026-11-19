@@ -8,6 +8,8 @@ export type Visitor = { id: string; email: string; name: string; avatar: string;
 type Stored = { access_token: string; refresh_token: string; expires_at: number; user: Visitor; provider_token?: string };
 
 export const STORAGE_KEY = "aur-visitor-v1";
+export const KNOWN_VISITOR_KEY = "aur-known-visitor-v1";
+export type KnownVisitor = { email: string; name: string; avatar: string; provider: string; lastSeenAt: number };
 const RETURN_KEY = "aur-return-to";
 const listeners = new Set<() => void>();
 const emit = () => listeners.forEach((f) => f());
@@ -23,8 +25,38 @@ function read(): Stored | null {
     return s?.access_token && s?.user?.id ? (s as Stored) : null;
   } catch { return null; }
 }
+function saveKnownVisitor(v: KnownVisitor) {
+  try { localStorage.setItem(KNOWN_VISITOR_KEY, JSON.stringify(v)); } catch { /* ignore */ }
+}
+export function getKnownVisitor(): KnownVisitor | null {
+  try {
+    const raw = localStorage.getItem(KNOWN_VISITOR_KEY);
+    if (!raw) return null;
+    const d = JSON.parse(raw);
+    return d && (d.email || d.provider) ? (d as KnownVisitor) : null;
+  } catch { return null; }
+}
+export function clearKnownVisitor() {
+  try { localStorage.removeItem(KNOWN_VISITOR_KEY); } catch { /* ignore */ }
+  emit();
+}
 function write(s: Stored | null) {
-  try { if (s) localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); else localStorage.removeItem(STORAGE_KEY); } catch { /* storage unavailable */ }
+  try {
+    if (s) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
+      if (s.user?.id) {
+        saveKnownVisitor({
+          email: s.user.email,
+          name: s.user.name,
+          avatar: s.user.avatar,
+          provider: s.user.provider || "email",
+          lastSeenAt: Date.now(),
+        });
+      }
+    } else {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  } catch { /* storage unavailable */ }
   emit();
 }
 export function parseVisitor(raw: string | null): Visitor | null {
@@ -139,7 +171,10 @@ export async function sendEmailLink(email: string) {
   if (!/^[^\s@]{1,64}@[^\s@]{1,255}\.[^\s@]{2,}$/.test(value)) throw new Error("Enter a valid email address.");
   rememberReturn();
   const r = await fetch(SB_URL + "/auth/v1/otp?redirect_to=" + redirectTarget(), { method: "POST", headers: { apikey: SB_KEY, "Content-Type": "application/json" }, body: JSON.stringify({ email: value, create_user: true }) });
-  if (r.ok) return;
+  if (r.ok) {
+    saveKnownVisitor({ email: value, name: value.split("@")[0] || "", avatar: "", provider: "email", lastSeenAt: Date.now() });
+    return;
+  }
   let msg = "";
   try { const d = await r.json(); msg = String(d.msg || d.error_description || d.message || ""); } catch { /* ignore */ }
   if (r.status === 429) throw new Error("Too many requests. Please wait a minute and try again.");
