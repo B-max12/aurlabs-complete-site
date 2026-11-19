@@ -119,6 +119,8 @@ const admin = await import("../app/api/admin/route.ts");
 const submissions = await import("../app/api/submissions/route.ts");
 const ghStars = await import("../app/api/github/stars/route.ts");
 const feed = await import("../app/feed.xml/route.ts");
+const jsonFeed = await import("../app/feed.json/route.ts");
+const { isSafeDownloadTarget } = await import("../app/api/download/route.ts");
 const { cleanDisplayText, defaultContent } = await import("../lib/content.ts");
 const { videoURL, productSchema, settingsSchema, safeURL } = await import("../lib/validation.ts");
 
@@ -313,6 +315,18 @@ const rssRes = await feed.GET();
 eq(rssRes.status, 200, "RSS /feed.xml responds 200");
 const rssXml = await rssRes.text();
 ok(rssXml.includes("<rss version=\"2.0\"") && rssXml.includes("why-we-build-for-everyone"), "RSS feed contains published entries");
+
+const jfRes = await jsonFeed.GET();
+eq(jfRes.status, 200, "JSON Feed /feed.json responds 200");
+const jfData = await jfRes.json();
+eq(jfData.version, "https://jsonfeed.org/version/1.1", "JSON Feed 1.1 version matches");
+ok(Array.isArray(jfData.items) && jfData.items.length >= 2, "JSON Feed includes published items");
+
+ok(isSafeDownloadTarget("https://github.com/B-max12/dear_diary/releases/download/v1.0/app.AppImage"), "Valid GitHub HTTPS release target allowed");
+ok(!isSafeDownloadTarget("http://github.com/B-max12/dear_diary/app.exe"), "HTTP download target rejected");
+ok(!isSafeDownloadTarget("https://localhost/secret"), "Localhost download target rejected");
+ok(!isSafeDownloadTarget("https://127.0.0.1/secret"), "Loopback IP download target rejected");
+ok(!isSafeDownloadTarget("https://user:pass@example.com/file.zip"), "Credentialed download target rejected");
 
 console.log(`PASS: ${checks} security & feature assertions passed.`);
 sqlite.close();

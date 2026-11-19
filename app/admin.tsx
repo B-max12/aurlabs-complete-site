@@ -946,16 +946,43 @@ export default function Admin({ initial }: { initial: SiteContent }) {
                 <section className="admin-panel">
                   <h2>Recent security & edit log</h2>
                   {data.events.length ? (
-                    data.events.slice(0, 10).map((e, i) => (
-                      <div className="activity-row" key={i}>
-                        <span className="orange-dot" />
-                        <div>
-                          <b>{e.action.replaceAll(".", " / ")}</b>
-                          <span>{e.target}</span>
+                    data.events.slice(0, 15).map((e, i) => {
+                      const isAlert = String(e.action || "").includes("failed");
+                      const actorLabel =
+                        e.actor === "owner"
+                          ? "Main owner"
+                          : String(e.actor || "").startsWith("team:")
+                            ? "Team admin"
+                            : "Anonymous";
+                      return (
+                        <div className="activity-row" key={i}>
+                          <span className="orange-dot" style={isAlert ? { background: "#fb7185" } : undefined} />
+                          <div>
+                            <b>
+                              {e.action.replaceAll(".", " / ")}
+                              {isAlert && (
+                                <span
+                                  style={{
+                                    marginLeft: 8,
+                                    padding: "2px 7px",
+                                    borderRadius: 999,
+                                    fontSize: 10,
+                                    background: "rgba(244, 63, 94, 0.16)",
+                                    color: "#fb7185",
+                                  }}
+                                >
+                                  Security alert
+                                </span>
+                              )}
+                            </b>
+                            <span>
+                              {actorLabel} · {e.target}
+                            </span>
+                          </div>
+                          <small>{new Date(e.created_at).toLocaleDateString()}</small>
                         </div>
-                        <small>{new Date(e.created_at).toLocaleDateString()}</small>
-                      </div>
-                    ))
+                      );
+                    })
                   ) : (
                     <p className="muted">Your edits and security events will appear here.</p>
                   )}
