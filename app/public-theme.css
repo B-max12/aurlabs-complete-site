@@ -163,15 +163,88 @@ html[data-theme="dark"] .public-site .site-header nav a:hover:not(.active) {
   transform: translateY(-1px);
 }
 .public-site .header-support:hover svg:first-child { color: #ede8e4; }
-@media (max-width: 960px) {
+@media (max-width: 900px) {
   .public-site .site-header { padding: 10px 12px 4px; top: 6px; }
-  .public-site .header-inner { padding: 8px 12px; gap: 8px; }
+  .public-site .header-inner {
+    width: 100%;
+    min-height: 58px;
+    padding: 7px 10px 7px 14px;
+    gap: 8px;
+  }
+  .public-site .header-support {
+    margin-left: auto;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    justify-content: center;
+    font-size: 0;
+    gap: 0;
+  }
+  .public-site .header-support > svg:last-child { display: none; }
+  .public-site .mobile-menu {
+    display: inline-flex;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, #8d6613 38%, var(--line));
+    background: color-mix(in srgb, var(--white) 88%, rgba(141, 102, 19, 0.08));
+    color: var(--ink);
+    flex-shrink: 0;
+  }
   .public-site .site-header nav {
-    border-radius: 20px;
+    display: none !important;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 12px;
+    right: 12px;
+    z-index: 90;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
     padding: 12px;
-    background: var(--white);
+    border-radius: 22px;
+    background: color-mix(in srgb, var(--white) 95%, rgba(237, 232, 228, 0.92));
+    backdrop-filter: blur(22px) saturate(165%);
+    -webkit-backdrop-filter: blur(22px) saturate(165%);
     border: 1.5px solid #8d6613;
-    box-shadow: 0 20px 44px -12px rgba(25, 19, 6, 0.35);
+    box-shadow:
+      0 22px 48px -12px rgba(25, 19, 6, 0.32),
+      inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  }
+  html[data-theme="dark"] .public-site .site-header nav {
+    background: color-mix(in srgb, var(--white) 95%, rgba(25, 19, 6, 0.92));
+    box-shadow: 0 24px 52px -12px rgba(0, 0, 0, 0.75);
+  }
+  .public-site .site-header nav.nav-open {
+    display: flex !important;
+  }
+  .public-site .site-header nav a {
+    width: 100%;
+    justify-content: space-between;
+    padding: 12px 18px;
+    border-radius: 14px;
+    font-size: 15px;
+  }
+}
+@media (max-width: 650px) {
+  .public-site .header-inner {
+    min-height: 54px;
+    padding: 6px 8px 6px 12px;
+    gap: 6px;
+  }
+  .public-site .brand { font-size: 17px; gap: 7px; }
+  .public-site .header-support,
+  .public-site .cmd-trigger-btn,
+  .public-site .theme-toggle-btn,
+  .public-site .visitor-signin-btn,
+  .public-site .visitor-avatar-btn,
+  .public-site .mobile-menu {
+    width: 36px;
+    height: 36px;
+    min-height: 36px;
+    padding: 0;
+    border-radius: 50%;
+    justify-content: center;
   }
 }
 
