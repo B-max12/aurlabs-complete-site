@@ -302,9 +302,33 @@ html[data-theme="light"] .admin-app .admin-badge.published { background: #ecfdf3
 
 /* Tabs and toolbar */
 .admin-app .catalogue-toolbar { border-bottom: 1px solid var(--st-line); padding-bottom: 16px; }
-.admin-app .category-tabs > button { padding: 8px 14px; font-size: 13px; font-weight: 500; border-radius: 8px; color: var(--st-muted); }
-.admin-app .category-tabs > button:not(.active):hover { background: var(--st-fill); color: var(--st-ink); }
-.admin-app .category-tabs > button.active { background: #8d6613; color: #ede8e4; }
+:is(.admin-app, .admin-gate) .category-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--st-wash);
+  border: 1px solid color-mix(in srgb, #8d6613 30%, var(--st-line));
+}
+:is(.admin-app, .admin-gate) .category-tabs > button {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 999px;
+  color: var(--st-muted);
+  background: transparent;
+}
+:is(.admin-app, .admin-gate) .category-tabs > button:not(.active):hover {
+  background: var(--st-fill);
+  color: var(--st-ink);
+}
+:is(.admin-app, .admin-gate) .category-tabs > button.active {
+  background: linear-gradient(135deg, #a67817 0%, #8d6613 55%, #6b4d0e 100%) !important;
+  color: #ede8e4 !important;
+  font-weight: 600;
+  box-shadow: 0 6px 16px -4px rgba(141, 102, 19, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
 .admin-app .search-box { border: 1px solid var(--st-line-strong); border-radius: 10px; background: var(--st-card); }
 .admin-app .search-box input { font-size: 14px; color: var(--st-ink); }
 
