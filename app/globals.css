@@ -696,20 +696,23 @@ html[data-theme="light"] .pl-share-btn.copied {
   align-items: center;
   gap: 7px;
   height: 40px;
-  padding: 0 13px;
-  border-radius: 10px;
-  border: 1px solid var(--st-line2, #8d6613);
-  background: var(--st-card, var(--white));
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, #8d6613 38%, var(--line, #d4c6b4));
+  background: color-mix(in srgb, var(--st-card, var(--white)) 88%, rgba(141, 102, 19, 0.08));
   color: var(--st-ink, var(--ink));
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   flex-shrink: 0;
+  box-shadow: 0 3px 10px -4px rgba(141, 102, 19, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.65);
 }
 
 .theme-toggle-btn:hover {
   background: var(--st-wash, var(--paper-warm));
-  border-color: #9a8c78;
+  border-color: #8d6613;
+  color: #8d6613;
+  transform: translateY(-1px);
 }
 
 @media (max-width: 650px) {
@@ -755,8 +758,20 @@ html[data-theme="light"] .seo-all-ok { color: #067647; }
 @media (max-width: 900px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 600px) { .stats-grid { grid-template-columns: 1fr; } }
 
-/* Bronze 60% (#8D6613) & Pearl 40% (#EDE8E4) global overrides */
+/* Pearl 60% (#EDE8E4) Main & Bronze 40% (#8D6613) Second global overrides */
 :root {
+  --paper: #ede8e4;
+  --paper-warm: #e5ddd5;
+  --white: #f7f4f0;
+  --ink: #191306;
+  --muted: #6e4f0e;
+  --muted-light: #8d6613;
+  --line: #d4c6b4;
+  --orange: #8d6613;
+  --orange-dark: #6b4d0e;
+  --sage: #e1d9d1;
+}
+html[data-theme="dark"] {
   --paper: #191306;
   --paper-warm: #241b09;
   --white: #211908;
@@ -768,17 +783,5 @@ html[data-theme="light"] .seo-all-ok { color: #067647; }
   --orange-dark: #b5851c;
   --sage: #33260d;
 }
-html[data-theme="light"] {
-  --paper: #ede8e4;
-  --paper-warm: #e4ddd7;
-  --white: #ffffff;
-  --ink: #191306;
-  --muted: #8d6613;
-  --muted-light: #9a8c78;
-  --line: #cfc4b8;
-  --orange: #8d6613;
-  --orange-dark: #191306;
-  --sage: #e1d9d1;
-}
-::selection { background: rgba(141, 102, 19, 0.45); color: var(--ink); }
+::selection { background: rgba(141, 102, 19, 0.35); color: var(--ink); }
 :focus-visible { outline: 2px solid #8d6613 !important; }

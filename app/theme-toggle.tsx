@@ -7,15 +7,15 @@ type Theme = "dark" | "light";
 
 /** Persistent Dark/Light theme toggle synced across tabs and header instances. */
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>("dark");
+  const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
     const read = (): Theme => {
       try {
-        const saved = localStorage.getItem("aur-theme");
+        const saved = localStorage.getItem("aur-theme-pearl");
         if (saved === "light" || saved === "dark") return saved;
       } catch {}
-      return document.documentElement.dataset.theme === "light" ? "light" : "dark";
+      return document.documentElement.dataset.theme === "dark" ? "dark" : "light";
     };
 
     const current = read();
@@ -35,7 +35,7 @@ export default function ThemeToggle() {
     document.documentElement.dataset.theme = next;
     setTheme(next);
     try {
-      localStorage.setItem("aur-theme", next);
+      localStorage.setItem("aur-theme-pearl", next);
     } catch {}
     window.dispatchEvent(new CustomEvent<Theme>("aur-theme-change", { detail: next }));
   };

@@ -1,5 +1,27 @@
-/* Admin studio theme: Bronze 60% (#8D6613) & Pearl 40% (#EDE8E4) with Light companion mode. */
+/* Admin studio theme: Pearl 60% (#EDE8E4) Main & Bronze 40% (#8D6613) Second with Dark companion mode. */
 :is(.admin-app, .admin-gate) {
+  --st-bg: #ede8e4;
+  --st-card: #f7f4f0;
+  --st-ink: #191306;
+  --st-body: #3d2e10;
+  --st-muted: #6e4f0e;
+  --st-faint: #8d6613;
+  --st-line: #d4c6b4;
+  --st-line2: #8d6613;
+  --st-line-strong: #8d6613;
+  --st-wash: #e5ddd5;
+  --st-fill: #dbd0c5;
+  --st-accent: #8d6613;
+  --st-accent-hover: #6b4d0e;
+  --st-shadow: 0 1px 2px rgba(25, 19, 6, 0.06), 0 14px 32px -18px rgba(141, 102, 19, 0.18);
+  --st-shadow-sm: 0 1px 2px rgba(25, 19, 6, 0.06), 0 2px 6px -3px rgba(25, 19, 6, 0.08);
+  font-family: var(--font-inter), "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--st-ink);
+  letter-spacing: -0.006em;
+  -webkit-font-smoothing: antialiased;
+}
+
+html[data-theme="dark"] :is(.admin-app, .admin-gate) {
   --st-bg: #191306;
   --st-card: #211908;
   --st-ink: #ede8e4;
@@ -15,28 +37,6 @@
   --st-accent-hover: #b5851c;
   --st-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 16px 36px -16px rgba(0, 0, 0, 0.7);
   --st-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 2px 6px -3px rgba(0, 0, 0, 0.5);
-  font-family: var(--font-inter), "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  color: var(--st-ink);
-  letter-spacing: -0.006em;
-  -webkit-font-smoothing: antialiased;
-}
-
-html[data-theme="light"] :is(.admin-app, .admin-gate) {
-  --st-bg: #ede8e4;
-  --st-card: #ffffff;
-  --st-ink: #191306;
-  --st-body: #3d2e10;
-  --st-muted: #8d6613;
-  --st-faint: #9a8c78;
-  --st-line: #cfc4b8;
-  --st-line2: #8d6613;
-  --st-line-strong: #8d6613;
-  --st-wash: #e4ddd7;
-  --st-fill: #dad1c9;
-  --st-accent: #191306;
-  --st-accent-hover: #8d6613;
-  --st-shadow: 0 1px 2px rgba(25, 19, 6, 0.06), 0 14px 32px -18px rgba(141, 102, 19, 0.16);
-  --st-shadow-sm: 0 1px 2px rgba(25, 19, 6, 0.06), 0 2px 6px -3px rgba(25, 19, 6, 0.08);
 }
 
 :is(.admin-app, .admin-gate) :is(h1, h2, h3, h4, b, button, input, select, textarea, label, dt, dd) {

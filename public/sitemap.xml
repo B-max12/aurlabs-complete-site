@@ -2,79 +2,79 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://aurlabs.online/</loc>
-    <lastmod>2026-11-19T23:56:34.740Z</lastmod>
+    <lastmod>2026-11-20T21:06:14.895Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://aurlabs.online/products</loc>
-    <lastmod>2026-11-19T23:56:34.741Z</lastmod>
+    <lastmod>2026-11-20T21:06:14.895Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://aurlabs.online/about</loc>
-    <lastmod>2026-11-19T23:56:34.741Z</lastmod>
+    <lastmod>2026-11-20T21:06:14.895Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://aurlabs.online/journal</loc>
-    <lastmod>2026-11-19T23:56:34.741Z</lastmod>
+    <lastmod>2026-11-20T21:06:14.895Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://aurlabs.online/research</loc>
-    <lastmod>2026-11-19T23:56:34.741Z</lastmod>
+    <lastmod>2026-11-20T21:06:14.895Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://aurlabs.online/join</loc>
-    <lastmod>2026-11-19T23:56:34.741Z</lastmod>
+    <lastmod>2026-11-20T21:06:14.895Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://aurlabs.online/support</loc>
-    <lastmod>2026-11-19T23:56:34.741Z</lastmod>
+    <lastmod>2026-11-20T21:06:14.895Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://aurlabs.online/contact</loc>
-    <lastmod>2026-11-19T23:56:34.741Z</lastmod>
+    <lastmod>2026-11-20T21:06:14.895Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://aurlabs.online/privacy</loc>
-    <lastmod>2026-11-19T23:56:34.741Z</lastmod>
+    <lastmod>2026-11-20T21:06:14.895Z</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://aurlabs.online/terms</loc>
-    <lastmod>2026-11-19T23:56:34.741Z</lastmod>
+    <lastmod>2026-11-20T21:06:14.895Z</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://aurlabs.online/aur-notes</loc>
-    <lastmod>2026-11-19T23:56:34.741Z</lastmod>
+    <lastmod>2026-11-20T21:06:14.895Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://aurlabs.online/aur-pocket</loc>
-    <lastmod>2026-11-19T23:56:34.741Z</lastmod>
+    <lastmod>2026-11-20T21:06:14.895Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://aurlabs.online/aur-cli</loc>
-    <lastmod>2026-11-19T23:56:34.741Z</lastmod>
+    <lastmod>2026-11-20T21:06:14.895Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>

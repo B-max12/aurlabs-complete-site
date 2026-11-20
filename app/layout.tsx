@@ -45,12 +45,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="dark" suppressHydrationWarning className={inter.variable}>
+    <html lang="en" data-theme="light" suppressHydrationWarning className={inter.variable}>
       <head>
         <script
           dangerouslySetInnerHTML={{
             __html:
-              'try{var t=localStorage.getItem("aur-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t;}catch(e){}',
+              'try{var t=localStorage.getItem("aur-theme-pearl");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t;}catch(e){}',
           }}
         />
       </head>

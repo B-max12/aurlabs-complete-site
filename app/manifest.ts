@@ -8,7 +8,7 @@ export default function manifest(): MetadataRoute.Manifest {
       "An independent software lab building useful, free desktop, mobile, and CLI tools for people everywhere.",
     start_url: "/",
     display: "standalone",
-    background_color: "#191306",
+    background_color: "#EDE8E4",
     theme_color: "#8D6613",
     icons: [
       {

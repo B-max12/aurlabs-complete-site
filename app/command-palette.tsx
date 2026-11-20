@@ -68,14 +68,15 @@ export function CommandPalette({ content }: { content: SiteContent }) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const toggleTheme = () => {
-    const current = document.documentElement.dataset.theme === "light" ? "light" : "dark";
+    const current = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
     const next = current === "dark" ? "light" : "dark";
     document.documentElement.dataset.theme = next;
     try {
-      localStorage.setItem("aur-theme", next);
+      localStorage.setItem("aur-theme-pearl", next);
     } catch {
       /* ignore */
     }
+    window.dispatchEvent(new CustomEvent("aur-theme-change", { detail: next }));
   };
 
   const allItems = useMemo<PaletteItem[]>(() => {
