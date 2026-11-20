@@ -1613,3 +1613,354 @@ html[data-theme="light"] .public-site .gh-star-connect {
   font-size: 13.5px;
   line-height: 1.65;
 }
+
+/* ============================================================================
+   COMPLETE SITE POLYMORPHISM (Frosted Pearl Glass + Sculpted Neumorphism)
+   ============================================================================ */
+.public-site :is(
+  .product-card,
+  .article-card,
+  .lab-workbench,
+  .pl-feature-card,
+  .pl-release-card,
+  .pl-legal-grid > div,
+  .team-card,
+  .team-join,
+  .invitation,
+  .support-strip,
+  .info-banner,
+  .empty-state,
+  .application-form,
+  .contact-form,
+  .donation-form,
+  .success-card,
+  .aur-video-section,
+  .feature-panel,
+  .release-row,
+  .release-notify-box,
+  .auri-ask,
+  .ask-answer
+) {
+  background: color-mix(in srgb, var(--white) 84%, rgba(237, 232, 228, 0.72));
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border: 1px solid color-mix(in srgb, #8d6613 30%, var(--line));
+  border-radius: 20px;
+  box-shadow:
+    0 14px 34px -14px rgba(141, 102, 19, 0.2),
+    0 4px 10px -2px rgba(25, 19, 6, 0.06),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(141, 102, 19, 0.12);
+  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.24s ease, border-color 0.24s ease;
+}
+
+html[data-theme="dark"] .public-site :is(
+  .product-card,
+  .article-card,
+  .lab-workbench,
+  .pl-feature-card,
+  .pl-release-card,
+  .pl-legal-grid > div,
+  .team-card,
+  .team-join,
+  .invitation,
+  .support-strip,
+  .info-banner,
+  .empty-state,
+  .application-form,
+  .contact-form,
+  .donation-form,
+  .success-card,
+  .aur-video-section,
+  .feature-panel,
+  .release-row,
+  .release-notify-box,
+  .auri-ask,
+  .ask-answer
+) {
+  background: color-mix(in srgb, var(--white) 86%, rgba(25, 19, 6, 0.75));
+  border-color: color-mix(in srgb, #8d6613 42%, var(--line));
+  box-shadow:
+    0 18px 40px -14px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(237, 232, 228, 0.14),
+    inset 0 -1px 0 rgba(141, 102, 19, 0.2);
+}
+
+.public-site :is(.product-card, .article-card, .pl-feature-card, .pl-release-card, .team-card):hover {
+  transform: translateY(-4px);
+  border-color: #8d6613;
+  box-shadow:
+    0 22px 44px -14px rgba(141, 102, 19, 0.32),
+    0 6px 14px -2px rgba(25, 19, 6, 0.08),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.9);
+}
+
+.public-site .support-strip {
+  padding: 24px 30px;
+  margin-bottom: 56px;
+}
+
+/* Recessed Neumorphic Docks, Inputs & Footers */
+.public-site :is(.category-tabs, .segmented, .search-box, .draft-notice, .auri-preferences) {
+  background: color-mix(in srgb, var(--paper) 88%, rgba(141, 102, 19, 0.08));
+  border: 1px solid color-mix(in srgb, #8d6613 24%, var(--line));
+  border-radius: 999px;
+  box-shadow:
+    inset 0 2px 5px rgba(25, 19, 6, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.public-site :is(.draft-notice, .auri-preferences) {
+  border-radius: 14px;
+}
+.public-site .category-tabs,
+.public-site .segmented {
+  padding: 4px;
+}
+.public-site .mission-strip {
+  background: color-mix(in srgb, var(--white) 72%, rgba(141, 102, 19, 0.08));
+  backdrop-filter: blur(14px);
+  border-block: 1px solid color-mix(in srgb, #8d6613 28%, var(--line));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+.public-site .site-footer {
+  background: color-mix(in srgb, var(--st-wash) 86%, rgba(141, 102, 19, 0.08));
+  border-top: 1.5px solid color-mix(in srgb, #8d6613 30%, var(--line));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+.public-site input:not([type="checkbox"]):not([type="radio"]),
+.public-site select,
+.public-site textarea {
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--paper) 85%, #ffffff);
+  border: 1px solid color-mix(in srgb, #8d6613 30%, var(--line));
+  box-shadow: inset 0 2px 4px rgba(25, 19, 6, 0.06), 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+html[data-theme="dark"] .public-site input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme="dark"] .public-site select,
+html[data-theme="dark"] .public-site textarea {
+  background: color-mix(in srgb, var(--paper) 90%, #000000);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.45);
+}
+
+/* Modal & Dialog Polymorphic Glass */
+.visitor-dialog,
+.cmd-dialog,
+.public-site :is(.auri-welcome, .auri-context, .auri-dialog) {
+  background: color-mix(in srgb, var(--white, #f7f4f0) 88%, rgba(237, 232, 228, 0.8));
+  backdrop-filter: blur(26px) saturate(170%);
+  -webkit-backdrop-filter: blur(26px) saturate(170%);
+  border: 1.5px solid color-mix(in srgb, #8d6613 42%, var(--line, #d4c6b4));
+  border-radius: 22px;
+  box-shadow:
+    0 28px 68px -18px rgba(25, 19, 6, 0.35),
+    0 8px 24px -8px rgba(141, 102, 19, 0.25),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.85);
+}
+html[data-theme="dark"] :is(.visitor-dialog, .cmd-dialog),
+html[data-theme="dark"] .public-site :is(.auri-welcome, .auri-context, .auri-dialog) {
+  background: color-mix(in srgb, var(--white, #211908) 90%, rgba(25, 19, 6, 0.85));
+  box-shadow:
+    0 32px 72px -16px rgba(0, 0, 0, 0.78),
+    inset 0 1px 0 rgba(237, 232, 228, 0.14);
+}
+
+/* ============================================================================
+   BEAUTIFUL POLYMORPHIC BUTTONS SITE-WIDE
+   ============================================================================ */
+.public-site .button {
+  border-radius: 999px;
+  min-height: 46px;
+  padding: 12px 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease, filter 0.2s ease;
+}
+.public-site .button:active {
+  transform: translateY(0) scale(0.98) !important;
+}
+.public-site .button.orange,
+.visitor-submit,
+.public-site .gh-star-connect {
+  border-radius: 999px;
+  background: linear-gradient(135deg, #b5851c 0%, #8d6613 52%, #684a0c 100%);
+  color: #ede8e4;
+  border: 1px solid rgba(115, 83, 15, 0.85);
+  box-shadow:
+    0 10px 24px -6px rgba(141, 102, 19, 0.54),
+    0 3px 8px -2px rgba(25, 19, 6, 0.16),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -1.5px 0 rgba(40, 26, 4, 0.32);
+}
+.public-site .button.orange:hover,
+.visitor-submit:hover,
+.public-site .gh-star-connect:hover {
+  background: linear-gradient(135deg, #c89628 0%, #9e7316 52%, #75530e 100%);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow:
+    0 15px 30px -6px rgba(141, 102, 19, 0.65),
+    0 4px 10px -2px rgba(25, 19, 6, 0.2),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.5);
+}
+.public-site .button.light,
+.public-site .pl-share-btn,
+.public-site .gh-star-btn,
+.public-site .pagination button,
+.visitor-provider {
+  border-radius: 999px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--white) 95%, #fff) 0%, color-mix(in srgb, var(--st-wash) 88%, var(--paper)) 100%);
+  color: var(--ink);
+  border: 1px solid color-mix(in srgb, #8d6613 40%, var(--line));
+  box-shadow:
+    0 6px 16px -6px rgba(141, 102, 19, 0.22),
+    0 2px 4px -1px rgba(25, 19, 6, 0.06),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.85);
+}
+html[data-theme="dark"] .public-site :is(.button.light, .pl-share-btn, .gh-star-btn, .pagination button),
+html[data-theme="dark"] .visitor-provider {
+  background: linear-gradient(180deg, rgba(48, 36, 12, 0.92) 0%, rgba(30, 22, 7, 0.92) 100%);
+  box-shadow:
+    0 8px 18px -6px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(237, 232, 228, 0.14);
+}
+.public-site .button.light:hover,
+.public-site .pl-share-btn:hover,
+.public-site .gh-star-btn:hover,
+.public-site .pagination button:hover,
+.visitor-provider:hover {
+  border-color: #8d6613;
+  color: #8d6613;
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 22px -6px rgba(141, 102, 19, 0.34),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.95);
+}
+html[data-theme="dark"] .public-site :is(.button.light, .pl-share-btn, .gh-star-btn, .pagination button):hover,
+html[data-theme="dark"] .visitor-provider:hover {
+  color: #ede8e4;
+  border-color: #c89628;
+}
+.public-site .button.dark {
+  border-radius: 999px;
+  background: linear-gradient(135deg, #35270c 0%, #191306 100%);
+  color: #ede8e4;
+  border: 1px solid #8d6613;
+  box-shadow:
+    0 10px 22px -6px rgba(25, 19, 6, 0.45),
+    inset 0 1px 0 rgba(237, 232, 228, 0.22);
+}
+.public-site .button.dark:hover {
+  background: linear-gradient(135deg, #a67817 0%, #8d6613 100%);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px -6px rgba(141, 102, 19, 0.55);
+}
+.public-site :is(.platform-filters > button, .category-tabs > button, .segmented > button, .workbench-tabs > button, .amount-grid > button) {
+  border-radius: 999px;
+  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.public-site :is(.platform-filters > button.selected, .category-tabs > button.active, .segmented > button.selected, .workbench-tabs > button.selected, .amount-grid > button.selected) {
+  background: linear-gradient(135deg, #a67817 0%, #8d6613 55%, #6b4d0e 100%) !important;
+  color: #ede8e4 !important;
+  border-color: #73530f !important;
+  box-shadow:
+    0 6px 16px -4px rgba(141, 102, 19, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+/* ============================================================================
+   AURI REDESIGN — LUXURY PEARL & BRONZE COMPANION + POLYMORPHIC UI
+   ============================================================================ */
+.public-site .auri-character {
+  filter: drop-shadow(0 10px 14px rgba(141, 102, 19, 0.28));
+}
+.public-site .auri-shadow {
+  background: rgba(141, 102, 19, 0.26);
+}
+.public-site .auri-head {
+  background: radial-gradient(ellipse at 32% 16%, #ffffff 0%, #f5f0ea 30%, #ede8e4 62%, #c9bcab 100%);
+  box-shadow:
+    inset -4px -5px 8px rgba(141, 102, 19, 0.26),
+    inset 3px 3px 5px rgba(255, 255, 255, 0.92),
+    0 4px 10px rgba(25, 19, 6, 0.16);
+}
+.public-site .auri-visor {
+  background: linear-gradient(145deg, #2d210a 0%, #191306 78%);
+  box-shadow: inset 1px 2px 4px rgba(0, 0, 0, 0.85), 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+.public-site .auri-visor > i {
+  background: #fbe3a4;
+  box-shadow: 0 0 8px rgba(212, 155, 39, 0.85);
+}
+.public-site .auri-visor > b {
+  border-bottom-color: #fbe3a4;
+}
+.public-site .auri-antenna {
+  background: linear-gradient(180deg, #c89628, #8d6613);
+}
+.public-site .auri-antenna > i {
+  background: radial-gradient(circle at 30% 25%, #fff5d6, #d49b27 65%, #8d6613 100%);
+  box-shadow: 0 0 10px rgba(212, 155, 39, 0.75);
+}
+.public-site .auri-ear {
+  background: linear-gradient(180deg, #b5851c, #8d6613);
+}
+.public-site .auri-ear.right {
+  background: linear-gradient(180deg, #8d6613, #5c420b);
+}
+.public-site .auri-body {
+  background: radial-gradient(ellipse at 28% 12%, #c89628 0%, #8d6613 55%, #5c420b 100%);
+  box-shadow: inset -3px -3px 6px rgba(25, 19, 6, 0.4), inset 2px 2px 4px rgba(255, 255, 255, 0.25);
+}
+.public-site .auri-body > i {
+  background: rgba(237, 232, 228, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: #8d6613;
+}
+.public-site .auri-hand {
+  background: linear-gradient(135deg, #ffffff 0%, #ede8e4 60%, #cbbca8 100%);
+}
+.public-site .auri-launcher {
+  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.public-site .auri-launcher:hover {
+  transform: translateY(-3px) scale(1.03);
+}
+.public-site .auri-launcher > span:last-child:not(.auri-character) {
+  background: linear-gradient(135deg, #a67817 0%, #8d6613 55%, #6b4d0e 100%);
+  color: #ede8e4;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 999px;
+  box-shadow:
+    0 10px 22px -6px rgba(141, 102, 19, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.38);
+}
+.public-site .auri-launcher.minimal {
+  width: 46px;
+  height: 46px;
+  background: linear-gradient(135deg, #a67817 0%, #8d6613 100%);
+  color: #ede8e4;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  box-shadow:
+    0 10px 24px -6px rgba(141, 102, 19, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.public-site .auri-context-label {
+  color: #8d6613;
+  font-weight: 700;
+}
+.public-site .auri-dialog-footer > button {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, #8d6613 30%, var(--line));
+  background: var(--st-wash);
+  color: var(--ink);
+  font-weight: 500;
+}
+.public-site .auri-dialog-footer > button:hover {
+  border-color: #8d6613;
+  color: #8d6613;
+}
