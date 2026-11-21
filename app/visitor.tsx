@@ -367,7 +367,7 @@ export function AccountMenu() {
           onClick={() => setDialog(true)}
         >
           <User size={15} />
-          <span>{known ? "Log in" : "Get started"}</span>
+          <span className="visitor-signin-label">{known ? "Log in" : "Get started"}</span>
         </button>
       )}
       {dialog && !visitor && createPortal(<SignInDialog onClose={() => setDialog(false)} />, document.body)}
