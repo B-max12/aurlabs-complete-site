@@ -3,13 +3,13 @@ import { defaultContent, type SiteContent, type ContentKind } from "./content";
 
 export function database(){return db;}
 export async function readContent(includeDrafts=false):Promise<SiteContent>{
-  const rows=await database().prepare("SELECT id, kind, data, published, deleted FROM content").all<{id:string;kind:ContentKind;data:string;published:number;deleted:number}>();
+  const rows=await database().prepare("SELECT id, kind, data, published, deleted, updated_at FROM content").all<{id:string;kind:ContentKind;data:string;published:number;deleted:number;updated_at?:number}>();
   const data=structuredClone(defaultContent);
   for(const row of rows.results){
     if(row.kind==="settings"){if(!row.deleted)data.settings={...data.settings,...JSON.parse(row.data)};continue;}
     const list=data[row.kind];if(!Array.isArray(list))continue;
     const i=list.findIndex(x=>x.id===row.id);if(i>=0)list.splice(i,1);
-    if(!row.deleted&&(includeDrafts||row.published))list.push({...JSON.parse(row.data),published:!!row.published});
+    if(!row.deleted&&(includeDrafts||row.published))list.push({...JSON.parse(row.data),published:!!row.published,...(row.updated_at?{updatedAt:Number(row.updated_at)}:{})});
   }
   for(const k of ["products","journal","research","team"] as const){
     if(!includeDrafts)(data[k] as unknown[])=data[k].filter(x=>x.published);

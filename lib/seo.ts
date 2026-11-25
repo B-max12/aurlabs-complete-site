@@ -83,7 +83,7 @@ export function generateProductJsonLd(product: Product) {
     name: product.name,
     alternateName: product.tagline,
     description: productDescription(product),
-    url: `${baseUrl}/${product.slug}`,
+    url: `${baseUrl}/products/${product.slug}`,
     applicationCategory:
       product.category === "app"
         ? "MobileApplication"
@@ -171,9 +171,26 @@ export function generateBreadcrumbJsonLd(product: Product) {
         "@type": "ListItem",
         position: 3,
         name: product.name,
-        item: `${SITE}/${product.slug}`,
+        item: `${SITE}/products/${product.slug}`,
       },
     ],
+  };
+}
+
+export function generateHowToJsonLd(product: Product) {
+  const steps = (product.howToSteps || []).map((s) => s.trim()).filter(Boolean);
+  if (steps.length === 0) return null;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: `How to use ${product.name}`,
+    description: productDescription(product),
+    step: steps.map((text, idx) => ({
+      "@type": "HowToStep",
+      position: idx + 1,
+      text,
+    })),
   };
 }
 

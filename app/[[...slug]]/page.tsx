@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound, permanentRedirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { readContent } from "@/lib/server";
 import { defaultContent } from "@/lib/content";
 import {
@@ -9,6 +9,7 @@ import {
   generateBreadcrumbJsonLd,
   generateCollectionJsonLd,
   generateFaqJsonLd,
+  generateHowToJsonLd,
   generateProductJsonLd,
   jsonLdScript,
   organizationJsonLd,
@@ -64,11 +65,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     // Fallback to defaultContent when storage is unavailable
   }
 
-  if (segments.length === 1) {
-    const product = content.products.find((p) => p.slug === segments[0] && p.published);
+  const productSlug =
+    segments.length === 1
+      ? segments[0]
+      : segments.length === 2 && segments[0] === "products"
+        ? segments[1]
+        : null;
+
+  if (productSlug) {
+    const product = content.products.find((p) => p.slug === productSlug && p.published);
     if (product) {
       const title = product.seoTitle || `${product.name} — ${product.tagline} | Aur Labs`;
       const description = product.seoDescription || product.description.split("\n\n")[0];
+      const canonicalUrl = `${SITE}/products/${product.slug}`;
       const images =
         product.screenshots.length > 0
           ? product.screenshots.map((s) => ({ url: s.startsWith("/") ? SITE + s : s }))
@@ -80,7 +89,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         openGraph: {
           title: product.name,
           description: product.tagline,
-          url: `${SITE}/${product.slug}`,
+          url: canonicalUrl,
           siteName: "Aur Labs",
           images,
           type: "website",
@@ -92,7 +101,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           images: images.map((i) => i.url),
         },
         alternates: {
-          canonical: `${SITE}/${product.slug}`,
+          canonical: canonicalUrl,
         },
       };
     }
@@ -158,22 +167,31 @@ export default async function Page({ params }: Props) {
   const { slug } = await params;
   const segments = slug || [];
 
-  if (segments[0] === "products" && segments.length === 2) {
-    permanentRedirect(`/${segments[1]}`);
-  }
-
   let content = defaultContent;
   let storageError = false;
   try {
     content = await readContent();
   } catch {
-    storageError = true;
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      content = await readContent();
+    } catch {
+      storageError = true;
+    }
   }
 
-  if (segments.length === 1) {
-    const product = content.products.find((p) => p.slug === segments[0] && p.published);
+  const productSlug =
+    segments.length === 1
+      ? segments[0]
+      : segments.length === 2 && segments[0] === "products"
+        ? segments[1]
+        : null;
+
+  if (productSlug) {
+    const product = content.products.find((p) => p.slug === productSlug && p.published);
     if (product) {
       const faqJsonLd = generateFaqJsonLd(product);
+      const howToJsonLd = generateHowToJsonLd(product);
       return (
         <>
           <script
@@ -184,6 +202,12 @@ export default async function Page({ params }: Props) {
             <script
               type="application/ld+json"
               dangerouslySetInnerHTML={jsonLdScript(faqJsonLd)}
+            />
+          )}
+          {howToJsonLd && (
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={jsonLdScript(howToJsonLd)}
             />
           )}
           <script
@@ -243,7 +267,7 @@ export default async function Page({ params }: Props) {
         .filter((p) => p.published)
         .map((p) => ({
           name: p.name,
-          url: `${SITE}/${p.slug}`,
+          url: `${SITE}/products/${p.slug}`,
           description: p.tagline,
         }))
     );

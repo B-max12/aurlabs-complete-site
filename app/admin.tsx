@@ -404,6 +404,11 @@ export default function Admin({ initial }: { initial: SiteContent }) {
         seoDescription: "",
         keyword: "",
         faq: "",
+        privacyPolicy: "",
+        termsOfUse: "",
+        supportText: "",
+        legalUpdatedAt: "",
+        howToSteps: [],
         published: false,
       });
     } else if (section === "team") {
@@ -1234,6 +1239,116 @@ export default function Admin({ initial }: { initial: SiteContent }) {
                             />
                           </div>
                           <SeoCheck e={editor} />
+                          <div style={{ marginTop: 18 }}>
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                gap: 12,
+                                marginBottom: 8,
+                              }}
+                            >
+                              <span className="field-label">How-to steps (HowTo JSON-LD)</span>
+                              <button
+                                type="button"
+                                className="button light small-button"
+                                onClick={() =>
+                                  edit("howToSteps", [...(editor.howToSteps || []), ""])
+                                }
+                              >
+                                <Plus size={13} /> Add step
+                              </button>
+                            </div>
+                            <p className="tiny muted" style={{ marginBottom: 10 }}>
+                              Optional step-by-step guide rendered as HowTo structured data on the
+                              product page.
+                            </p>
+                            {(editor.howToSteps || []).map((step: string, idx: number) => (
+                              <div
+                                key={idx}
+                                style={{
+                                  display: "flex",
+                                  gap: 8,
+                                  alignItems: "center",
+                                  marginBottom: 8,
+                                }}
+                              >
+                                <span className="tiny muted" style={{ minWidth: 24 }}>
+                                  {idx + 1}.
+                                </span>
+                                <input
+                                  type="text"
+                                  value={step}
+                                  placeholder={`Step ${idx + 1}`}
+                                  style={{
+                                    flex: 1,
+                                    padding: "9px 12px",
+                                    borderRadius: 6,
+                                    border: "1px solid var(--line)",
+                                    background: "var(--white)",
+                                    color: "var(--ink)",
+                                  }}
+                                  onChange={(e) => {
+                                    const next = [...(editor.howToSteps || [])];
+                                    next[idx] = e.target.value;
+                                    edit("howToSteps", next);
+                                  }}
+                                />
+                                <button
+                                  type="button"
+                                  className="icon-button"
+                                  aria-label={`Remove step ${idx + 1}`}
+                                  onClick={() =>
+                                    edit(
+                                      "howToSteps",
+                                      (editor.howToSteps || []).filter(
+                                        (_: string, i: number) => i !== idx
+                                      )
+                                    )
+                                  }
+                                >
+                                  <Trash2 size={14} />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="span-two seo-editor-box">
+                          <h3>Legal pages</h3>
+                          <p className="muted tiny">
+                            Leave empty and the site-wide policy is used as a fallback.
+                          </p>
+                          <div className="fields-grid">
+                            <Input
+                              label="Privacy Policy"
+                              value={editor.privacyPolicy || ""}
+                              onChange={(v) => edit("privacyPolicy", v)}
+                              area
+                              hint="Plain text or ## headings separated by blank lines. Published at /[slug]/privacy."
+                            />
+                            <Input
+                              label="Terms of Use"
+                              value={editor.termsOfUse || ""}
+                              onChange={(v) => edit("termsOfUse", v)}
+                              area
+                              hint="Plain text or ## headings separated by blank lines. Published at /[slug]/terms."
+                            />
+                            <Input
+                              label="Support page"
+                              value={editor.supportText || ""}
+                              onChange={(v) => edit("supportText", v)}
+                              area
+                              hint="Plain text or ## headings separated by blank lines. Published at /[slug]/support."
+                            />
+                            <Input
+                              label="Legal text last updated"
+                              type="date"
+                              value={editor.legalUpdatedAt || ""}
+                              onChange={(v) => edit("legalUpdatedAt", v)}
+                              hint="Shown at the top of the product legal pages."
+                            />
+                          </div>
                         </div>
                         <div className="span-two admin-platforms">
                           <span className="field-label">Target / supported platforms</span>

@@ -505,6 +505,33 @@ function ProductOverviewAndDownloads({
         </section>
       )}
 
+      <nav
+        aria-label={`${product.name} legal and support links`}
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: 10,
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "16px 20px",
+          margin: "24px auto",
+          fontSize: 13,
+          color: "var(--muted)",
+        }}
+      >
+        <Link href={product.privacyPolicy?.trim() ? `/${product.slug}/privacy` : "/privacy"}>
+          Privacy Policy
+        </Link>
+        <span aria-hidden="true">·</span>
+        <Link href={product.termsOfUse?.trim() ? `/${product.slug}/terms` : "/terms"}>
+          Terms of Use
+        </Link>
+        <span aria-hidden="true">·</span>
+        <Link href={product.supportText?.trim() ? `/${product.slug}/support` : "/support"}>
+          Support
+        </Link>
+      </nav>
+
       <section className="pl-auri-section" id="ask-auri" aria-label={`Questions about ${product.name}`}>
         <div className="pl-auri-inner">
           <h2>Questions about {product.name}?</h2>
