@@ -148,6 +148,7 @@ function Input({
   type = "text",
   required = false,
   hint = "",
+  placeholder = "",
 }: {
   label: string;
   value: string;
@@ -156,6 +157,7 @@ function Input({
   type?: string;
   required?: boolean;
   hint?: string;
+  placeholder?: string;
 }) {
   return (
     <label className={"field " + (area ? "span-two" : "")}>
@@ -164,11 +166,18 @@ function Input({
         <textarea
           rows={label.toLowerCase().includes("body") ? 12 : 4}
           value={value}
+          placeholder={placeholder || undefined}
           onChange={(e) => onChange(e.target.value)}
           required={required}
         />
       ) : (
-        <input type={type} value={value} onChange={(e) => onChange(e.target.value)} required={required} />
+        <input
+          type={type}
+          value={value}
+          placeholder={placeholder || undefined}
+          onChange={(e) => onChange(e.target.value)}
+          required={required}
+        />
       )}
       <small className="field-hint">{hint}</small>
     </label>
@@ -1417,6 +1426,8 @@ export default function Admin({ initial }: { initial: SiteContent }) {
                                     checksum: "",
                                     notes: "",
                                     date: new Date().toISOString().slice(0, 10),
+                                    displayName: "",
+                                    forDistros: "",
                                   },
                                 ])
                               }
@@ -1463,6 +1474,18 @@ export default function Admin({ initial }: { initial: SiteContent }) {
                                     onChange={(v) => setR("url", v)}
                                     required
                                     type="url"
+                                  />
+                                  <Input
+                                    label="Release display name"
+                                    placeholder="Ubuntu / Debian (.deb)"
+                                    value={r.displayName || ""}
+                                    onChange={(v) => setR("displayName", v)}
+                                  />
+                                  <Input
+                                    label="Recommended for"
+                                    placeholder="Ubuntu, Debian, Mint, Pop!_OS"
+                                    value={r.forDistros || ""}
+                                    onChange={(v) => setR("forDistros", v)}
                                   />
                                   <Input
                                     label="SHA-256 checksum (optional)"
