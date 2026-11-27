@@ -44,6 +44,7 @@ import {
   ReleaseHelp,
   downloadHref,
   fileExt,
+  fileNameOf,
 } from "./site";
 import "./public-theme.css";
 
@@ -458,37 +459,83 @@ function ProductOverviewAndDownloads({
                 </button>
               ))}
             </div>
-            {displayedReleases.map(({ release, index }) => (
-              <div key={index} className="pl-release-card">
-                <div className="pl-release-info">
-                  <strong>
-                    {release.platform} · v{release.version.replace(/^v/i, "")}
-                  </strong>
-                  <span>
-                    {release.architecture} · Released {release.date}
-                  </span>
-                  {release.requirements && <small>{release.requirements}</small>}
-                  {release.notes && <p className="pl-release-notes">{release.notes}</p>}
-                  {release.checksum && (
-                    <button
-                      type="button"
-                      className="checksum"
-                      onClick={() => copy(release.checksum, `chk-${index}`)}
-                    >
-                      <Copy size={13} />
-                      <span>
-                        {copiedKey === `chk-${index}` ? "Copied SHA-256 ✓" : release.checksum}
-                      </span>
-                    </button>
-                  )}
-                  <ReleaseHelp r={release} />
+            <details className="release-help" style={{ margin: "12px 0" }}>
+              <summary>Not sure which to download?</summary>
+              <p>
+                <strong>.deb</strong> — Best for Ubuntu, Debian, Linux Mint, Pop!_OS, and Zorin OS.
+                Double-click to install or run <code>sudo apt install ./file.deb</code>.
+              </p>
+              <p>
+                <strong>.pkg.tar.zst</strong> — For Arch Linux, Manjaro, EndeavourOS, and CachyOS.
+                Install with <code>sudo pacman -U file.pkg.tar.zst</code>.
+              </p>
+              <p>
+                <strong>.tar.gz</strong> — Portable archive that works on any Linux distribution
+                (Fedora, openSUSE, NixOS, etc.). Extract and run the binary directly.
+              </p>
+              <p>
+                <strong>.AppImage</strong> — Universal Linux executable. Make it executable with{" "}
+                <code>chmod +x file.AppImage</code> and run it directly.
+              </p>
+            </details>
+            {displayedReleases.map(({ release, index }) => {
+              const fileName = fileNameOf(release.url);
+              const ext = fileExt(release.url);
+              return (
+                <div key={index} className="pl-release-card">
+                  <div className="pl-release-info">
+                    <strong>
+                      {release.displayName?.trim() ||
+                        `${release.platform} · v${release.version.replace(/^v/i, "")}`}
+                    </strong>
+                    {release.forDistros?.trim() && (
+                      <p className="tiny muted release-distros">For {release.forDistros}</p>
+                    )}
+                    {fileName && (
+                      <code
+                        style={{
+                          display: "inline-block",
+                          marginTop: 4,
+                          marginBottom: 4,
+                          fontSize: 12.5,
+                          padding: "3px 8px",
+                          borderRadius: 6,
+                          background: "var(--st-wash)",
+                          border: "1px solid var(--line)",
+                          wordBreak: "break-all",
+                          width: "fit-content",
+                        }}
+                      >
+                        {fileName}
+                      </code>
+                    )}
+                    <span>
+                      {release.architecture}
+                      {ext ? ` · ${ext}` : ""} · Released {release.date}
+                    </span>
+                    {release.requirements && <small>{release.requirements}</small>}
+                    {release.notes && <p className="pl-release-notes">{release.notes}</p>}
+                    {release.checksum && (
+                      <button
+                        type="button"
+                        className="checksum"
+                        onClick={() => copy(release.checksum, `chk-${index}`)}
+                      >
+                        <Copy size={13} />
+                        <span>
+                          {copiedKey === `chk-${index}` ? "Copied SHA-256 ✓" : release.checksum}
+                        </span>
+                      </button>
+                    )}
+                    <ReleaseHelp r={release} />
+                  </div>
+                  <a href={downloadHref(product, index)} className="button dark" rel="nofollow">
+                    <Download size={16} />
+                    Download free
+                  </a>
                 </div>
-                <a href={downloadHref(product, index)} className="button dark" rel="nofollow">
-                  <Download size={16} />
-                  Download free
-                </a>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       )}

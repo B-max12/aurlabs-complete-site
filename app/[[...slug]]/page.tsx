@@ -13,6 +13,8 @@ import {
   generateProductJsonLd,
   jsonLdScript,
   organizationJsonLd,
+  productDescription,
+  productTitle,
 } from "@/lib/seo";
 import { ProductTemplate } from "@/app/product-templates";
 import Site from "../site";
@@ -75,8 +77,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (productSlug) {
     const product = content.products.find((p) => p.slug === productSlug && p.published);
     if (product) {
-      const title = product.seoTitle || `${product.name} — ${product.tagline} | Aur Labs`;
-      const description = product.seoDescription || product.description.split("\n\n")[0];
+      const title = productTitle(product);
+      const description = clip(productDescription(product), 155);
       const canonicalUrl = `${SITE}/products/${product.slug}`;
       const images =
         product.screenshots.length > 0
@@ -124,7 +126,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       (a) => a.slug === segments[1]
     );
     if (article) {
-      title = `${article.title} — Aur Labs`;
+      const withBrand = `${article.title} — Aur Labs`;
+      title = withBrand.length <= 60 ? withBrand : clip(article.title, 60);
       description = clip(article.summary, 155);
       image = article.cover || undefined;
       type = "article";
